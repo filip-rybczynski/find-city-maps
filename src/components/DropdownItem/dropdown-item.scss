@@ -1,0 +1,9 @@
+.dropdown-item {
+    background: white;
+    &:not(:last-of-type) {
+        border-bottom: 1px navy solid;
+    }
+    &:hover {
+        background: lightblue;
+    }
+}
