@@ -86,8 +86,9 @@ function CitySelection({ setCityToDisplay }) {
   };
 
   return (
-    <div>
+    <div className={"city-selection"}>
       <CitySearch
+        className={"city-selection__search"}
         searchValue={searchValue}
         currentCity={currentCity}
         getCities={getCities}
@@ -97,11 +98,15 @@ function CitySelection({ setCityToDisplay }) {
         setDropdownCities={setDropdownCities}
       />
       <CitySearchDropdown
+        className={"city-selection__dropdown"}
         dropdownCities={dropdownCities}
         setSearchValue={setSearchValue}
         setCurrentCity={setCurrentCity}
       />
-      <APICallCounter callsRemaining={apiCallsLeft}></APICallCounter>
+      <APICallCounter
+        className={"city-selection__api-counter"}
+        callsRemaining={apiCallsLeft}
+      ></APICallCounter>
     </div>
   );
 

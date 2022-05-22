@@ -2,6 +2,8 @@ import React from "react";
 
 import PropTypes from 'prop-types';
 
+import "./dropdown-item.scss";
+
 function DropdownItem({ setCurrentCity, setSearchValue, city }) {
   const chooseOption = () => {
     setCurrentCity(city.id);
@@ -9,7 +11,7 @@ function DropdownItem({ setCurrentCity, setSearchValue, city }) {
     setSearchValue(city.name);
   };
 
-  return <li onClick={chooseOption}>{`${city.name} (${city.country})`}</li>;
+  return <li className={'dropdown-item'} onClick={chooseOption}>{`${city.name} (${city.country})`}</li>;
 }
 
 DropdownItem.propTypes = {

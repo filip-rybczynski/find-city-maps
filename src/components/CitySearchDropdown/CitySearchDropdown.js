@@ -3,22 +3,24 @@ import DropdownItem from "../DropdownItem/DropdownItem";
 
 import PropTypes from 'prop-types';
 
+import "./city-search-dropdown.scss";
+
 function CitySearchDropdown({ dropdownCities, setCurrentCity, setSearchValue }) {
   return (
-    <div className={"city-search__dropdown"}>
-      <ul>
+      <ul className={"dropdown"}>
         {dropdownCities && dropdownCities.map((city) => (
           <DropdownItem
             key={city.id}
             city={city}
             setCurrentCity={setCurrentCity}
             setSearchValue={setSearchValue}
+
+            className={'dropdown__item'}
           >
               {/* {`${city.name} (${city.country})`} */}
           </DropdownItem>
         ))}
       </ul>
-    </div>
   );
 }
 

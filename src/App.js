@@ -1,4 +1,4 @@
-import "./App.css";
+import "./App.scss";
 import React, { useState } from "react";
 import CitySelection from "./components/CitySelection/CitySelection";
 import Footer from "./components/Footer/Footer";
@@ -57,16 +57,20 @@ function App() {
   // }
 
   return (
-    <>
-      <h1>City search</h1>
-      <CitySelection setCityToDisplay={setCityToDisplay}/>
+    <div className={"main"}>
+      <h1 className={"main__header"}>City search</h1>
+      <CitySelection
+        className={"main__city-selection"}
+        setCityToDisplay={setCityToDisplay}
+      />
       {/* <CityDisplay></CityDisplay> */}
-      {cityToDisplay && `Name: ${cityToDisplay.name},
+      {cityToDisplay &&
+        `Name: ${cityToDisplay.name},
       Country: ${cityToDisplay.country}
       Population: ${cityToDisplay.name}`}
 
-      <Footer />
-    </>
+      <Footer className={"main__footer"} />
+    </div>
   );
 }
 

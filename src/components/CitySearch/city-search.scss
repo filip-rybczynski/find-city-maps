@@ -1,0 +1,28 @@
+.city-search {
+    &__header {
+        padding: 8px 0;
+
+        font-weight: bold;
+        font-size: 1.5rem;
+    }
+    &__label {
+        padding: 0 0 4px 0;
+        display: block;
+        font-size: 1.2rem;
+    }
+    &__input {
+        min-width: 320px;
+
+        padding: 6px 12px;
+
+        border-radius: 12px;
+    }
+
+    &__button {
+        margin: 0 0 0 1rem;
+        padding: 0.3rem 0.5rem 0.2rem;
+
+        width: 6rem;
+        border-radius: 0.8rem;
+    }
+}

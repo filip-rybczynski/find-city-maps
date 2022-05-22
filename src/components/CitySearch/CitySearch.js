@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 
 import debounce from "../../functions/debounce";
 
+import "./city-search.scss";
+
 function CitySearch ({searchValue, setSearchValue, getCities, currentCity, setCityToDisplay}) {
 
   // useCallback used to ensure the debounced function references the same function across renders
@@ -37,9 +39,11 @@ const handleInputChange = (e) => {
   // }
 
   return (
-    <form>
-      <label htmlFor="city-search">Find city</label>
+    <form className="city-search">
+      <header className="city-search__header">Find city</header>
+      <label className="city-search__label" htmlFor="city-search">City name</label>
       <input
+      className={"city-search__input"}
         id="city-search"
         name="city-search"
         value={searchValue}
@@ -47,7 +51,9 @@ const handleInputChange = (e) => {
       />
       {currentCity && (<span>{currentCity.country}</span>)}
       
-      <button onClick={(e) => {
+      <button 
+      className={"city-search__button"}
+      onClick={(e) => {
         e.preventDefault();
         setCityToDisplay({
       "id": 2987553,
@@ -60,7 +66,7 @@ const handleInputChange = (e) => {
       "regionCode": 2,
       "latitude": 42.57777778,
       "longitude": 1.61944444
-    })}}>Select</button>
+    })}}>Fetch data</button>
     </form>
   );
 }

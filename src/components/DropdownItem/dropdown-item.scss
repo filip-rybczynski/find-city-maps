@@ -1,8 +1,11 @@
 .dropdown-item {
+    padding: 6px 18px 8px;
+
     background: white;
     &:not(:last-of-type) {
         border-bottom: 1px navy solid;
     }
+
     &:hover {
         background: lightblue;
     }
