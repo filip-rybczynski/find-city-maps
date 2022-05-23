@@ -1,28 +1,38 @@
-import React, {useCallback} from "react";
+import React, { useCallback } from "react";
 
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
 import debounce from "../../functions/debounce";
+import shortenNames from "../../functions/shortenNames";
 
 import "./city-search.scss";
 
-function CitySearch ({searchValue, setSearchValue, getCities, currentCity, setCityToDisplay}) {
-
+function CitySearch({
+  searchValue,
+  setSearchValue,
+  getCities,
+  currentCity,
+  setCityToDisplay,
+  setCurrentCity,
+}) {
   // useCallback used to ensure the debounced function references the same function across renders
   // https://www.freecodecamp.org/news/debounce-and-throttle-in-react-with-hooks/
   // https://dmitripavlutin.com/react-throttle-debounce/
   // also:
   // https://overreacted.io/making-setinterval-declarative-with-react-hooks/
-const debouncedGetCities = useCallback(debounce(getCities), [])
+  const debouncedGetCities = useCallback(debounce(getCities), []);
 
-const handleInputChange = (e) => {
-  e.preventDefault();
-  // 1. Update controlled input value via state update
-  setSearchValue(e.target.value)
+  const handleInputChange = (e) => {
+    e.preventDefault();
+    // 1. Update controlled input value via state update
+    setSearchValue(e.target.value);
 
-  // 2. Fetch cities for dropdown list
-  debouncedGetCities(e.target.value)
-}
+    // 2. Clear currentCity, to show dropdown list again (and remove country tag)
+    setCurrentCity(null);
+
+    // 2. Fetch cities for dropdown list
+    debouncedGetCities(e.target.value);
+  };
 
   // const handleSubmit = (e) => {
   //   e.preventDefault();
@@ -41,32 +51,33 @@ const handleInputChange = (e) => {
   return (
     <form className="city-search">
       <header className="city-search__header">Find city</header>
-      <label className="city-search__label" htmlFor="city-search">City name</label>
-      <input
-      className={"city-search__input"}
-        id="city-search"
-        name="city-search"
-        value={searchValue}
-        onChange={handleInputChange}
-      />
-      {currentCity && (<span>{currentCity.country}</span>)}
-      
-      <button 
-      className={"city-search__button"}
-      onClick={(e) => {
-        e.preventDefault();
-        setCityToDisplay({
-      "id": 2987553,
-      "wikiDataId": "Q24371",
-      "type": "CITY",
-      "name": "L'Aldosa de Canillo",
-      "country": "Andorra",
-      "countryCode": "AD",
-      "region": "Canillo",
-      "regionCode": 2,
-      "latitude": 42.57777778,
-      "longitude": 1.61944444
-    })}}>Fetch data</button>
+      <label className="city-search__label" htmlFor="city-search">
+        City name
+      </label>
+      <div className="city-search__search-bar">
+        <input
+          className={"city-search__input"}
+          id="city-search"
+          name="city-search"
+          value={searchValue}
+          onChange={handleInputChange}
+        />
+        {currentCity && (
+          <span className={"city-search__country-tag"}>
+            {`(${shortenNames(currentCity.country)})`}
+          </span>
+        )}
+      </div>
+
+      <button
+        className={"city-search__button"}
+        onClick={(e) => {
+          e.preventDefault();
+          setCityToDisplay(currentCity);
+        }}
+      >
+        Fetch data
+      </button>
     </form>
   );
 }
@@ -77,6 +88,7 @@ CitySearch.propTypes = {
   currentCity: PropTypes.object,
   getCities: PropTypes.func,
   setCityToDisplay: PropTypes.func,
-}
+  setCurrentCity: PropTypes.func,
+};
 
 export default CitySearch;

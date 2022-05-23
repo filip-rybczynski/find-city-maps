@@ -29,7 +29,7 @@ function CitySelection({ setCityToDisplay }) {
   const [dropdownCities, setDropdownCities] = useState([]);
   const [apiCallsLeft, setApiCallsLeft] = useState(getTodaysAPICalls());
   const [searchValue, setSearchValue] = useState("");
-  const [currentCity, setCurrentCity] = useState();
+  const [currentCity, setCurrentCity] = useState(null);
   // const [inputError, setInputError] = useState('');
 
   const fetchOptions = {
@@ -47,6 +47,8 @@ function CitySelection({ setCityToDisplay }) {
     }
     const searchPrefix = capitalize(prefix);
 
+    // Params must be part of the URL due to limitations of the fetch API
+    // https://github.com/github/fetch/issues/256
     fetch(
       `https://wft-geo-db.p.rapidapi.com/v1/geo/cities?minPopulation=100000&limit=10&sort=-population&namePrefix=${searchPrefix}`,
       fetchOptions
@@ -93,16 +95,21 @@ function CitySelection({ setCityToDisplay }) {
         currentCity={currentCity}
         getCities={getCities}
         setSearchValue={setSearchValue}
+        setCurrentCity={setCurrentCity}
         confirmCity={confirmCity}
         setCityToDisplay={setCityToDisplay}
         setDropdownCities={setDropdownCities}
       />
-      <CitySearchDropdown
-        className={"city-selection__dropdown"}
-        dropdownCities={dropdownCities}
-        setSearchValue={setSearchValue}
-        setCurrentCity={setCurrentCity}
-      />
+      {
+        !currentCity &&
+        (<CitySearchDropdown
+          className={"city-selection__dropdown"}
+          dropdownCities={dropdownCities}
+          setSearchValue={setSearchValue}
+          setCurrentCity={setCurrentCity}
+        />)
+      }
+      
       <APICallCounter
         className={"city-selection__api-counter"}
         callsRemaining={apiCallsLeft}
