@@ -1,4 +1,6 @@
 .main {
+  min-width: 100vh;
+
   display: flex;
   flex-direction: column;
 
@@ -7,13 +9,5 @@
 
   &__header {
     font-size: 3rem;
-  }
-
-  &__city-selection {
-
-  }
-
-  &__footer {
-    
   }
 }

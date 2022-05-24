@@ -11,7 +11,7 @@ import Footer from "./components/Footer/Footer";
 
 function App() {
   // const [cities, setCities] = useState([]); // Let's move this lower
-  // const [apiCallsLeft, setApiCallsLeft] = useState(1000); // Also let's move lower
+  const [apiCallsLeft, setApiCallsLeft] = useState(1000); // Also let's move lower
   // const [searchValue, setSearchValue] = useState(""); // Also let's move lower
   const [cityToDisplay, setCityToDisplay] = useState();
 
@@ -60,8 +60,8 @@ function App() {
     <div className={"main"}>
       <h1 className={"main__header"}>City search</h1>
       <CitySelection
-        className={"main__city-selection"}
         setCityToDisplay={setCityToDisplay}
+        setApiCallsLeft = {setApiCallsLeft}
       />
       {/* <CityDisplay></CityDisplay> */}
       {cityToDisplay &&
@@ -69,7 +69,7 @@ function App() {
       Country: ${cityToDisplay.country}
       Population: ${cityToDisplay.name}`}
 
-      <Footer className={"main__footer"} />
+      <Footer apiCallsLeft = {apiCallsLeft}/>
     </div>
   );
 }

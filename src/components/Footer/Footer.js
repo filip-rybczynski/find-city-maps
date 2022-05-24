@@ -1,11 +1,12 @@
 import React from 'react';
+import APICallCounter from "./../APICallCounter/APICallCounter";
+import './footer.scss';
 
-
-function Footer () {
+function Footer ({apiCallsLeft}) {
 return (
-<footer>
+<footer className={"footer"}>
     Footer placeholder
-    {/* <APICallCounter callsRemaining={apiCallsLeft}></APICallCounter> */}
+    <APICallCounter callsRemaining={apiCallsLeft}></APICallCounter>
 </footer>
 )
 }

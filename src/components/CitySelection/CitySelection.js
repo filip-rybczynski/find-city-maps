@@ -7,27 +7,27 @@ import PropTypes from "prop-types";
 import capitalize from "./../../functions/capitalize";
 import debounce from "../../functions/debounce";
 
-function CitySelection({ setCityToDisplay }) {
+function CitySelection({ setCityToDisplay, setApiCallsLeft }) {
   // I want to have an initially chosen city here
   // As well as an array of fetched cities
 
-  const getTodaysAPICalls = () => {
-    // constant used to track the API call limit (which resets each day)
-    const today = new Date().toLocaleDateString();
+  // const getTodaysAPICalls = () => {
+  //   // constant used to track the API call limit (which resets each day)
+  //   const today = new Date().toLocaleDateString();
 
-    let todaysAPICalls = localStorage.getItem(`apiCallsLeftFor${today}`);
+  //   let todaysAPICalls = localStorage.getItem(`apiCallsLeftFor${today}`);
 
-    if (todaysAPICalls) {
-      return todaysAPICalls;
-    } else {
-      // removing previous API call number records for tidiness
-      localStorage.clear();
-      return 1000;
-    }
-  };
+  //   if (todaysAPICalls) {
+  //     return todaysAPICalls;
+  //   } else {
+  //     // removing previous API call number records for tidiness
+  //     localStorage.clear();
+  //     return 1000;
+  //   }
+  // };
 
   const [dropdownCities, setDropdownCities] = useState([]);
-  const [apiCallsLeft, setApiCallsLeft] = useState(getTodaysAPICalls());
+  // const [apiCallsLeft, setApiCallsLeft] = useState(getTodaysAPICalls());
   const [searchValue, setSearchValue] = useState("");
   const [currentCity, setCurrentCity] = useState(null);
   // const [inputError, setInputError] = useState('');
@@ -110,10 +110,10 @@ function CitySelection({ setCityToDisplay }) {
         />)
       }
       
-      <APICallCounter
+      {/* <APICallCounter
         className={"city-selection__api-counter"}
         callsRemaining={apiCallsLeft}
-      ></APICallCounter>
+      ></APICallCounter> */}
     </div>
   );
 
