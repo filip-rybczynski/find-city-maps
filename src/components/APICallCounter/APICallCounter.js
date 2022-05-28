@@ -27,7 +27,7 @@ return (
 }
 
 APICallCounter.propTypes = {
-    callsRemaining: PropTypes.number,
+    callsRemaining: PropTypes.string,
 }
 
 export default APICallCounter;

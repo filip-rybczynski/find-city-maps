@@ -1,5 +1,10 @@
 .main {
-  min-width: 100vh;
+  position: relative;
+
+  padding: 0 0 3rem;
+
+  min-width: 100vw;
+  min-height: 100vh;
 
   display: flex;
   flex-direction: column;

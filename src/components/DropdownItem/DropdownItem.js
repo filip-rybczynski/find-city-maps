@@ -14,7 +14,7 @@ function DropdownItem({ setCurrentCity, setSearchValue, city }) {
   return (
     <li
       className={"dropdown-item"}
-      tabindex="0"
+      tabIndex="0"
       onClick={chooseOption}
     >{`${city.name} (${city.country})`}</li>
   );

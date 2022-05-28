@@ -1,6 +1,7 @@
 import "./App.scss";
 import React, { useState } from "react";
 import CitySelection from "./components/CitySelection/CitySelection";
+import CityDisplay from "./components/CityDisplay/CityDisplay";
 import Footer from "./components/Footer/Footer";
 
 // import capitalize from "./functions/capitalize";
@@ -63,11 +64,9 @@ function App() {
         setCityToDisplay={setCityToDisplay}
         setApiCallsLeft = {setApiCallsLeft}
       />
-      {/* <CityDisplay></CityDisplay> */}
-      {cityToDisplay &&
-        `Name: ${cityToDisplay.name},
-      Country: ${cityToDisplay.country}
-      Population: ${cityToDisplay.name}`}
+      {cityToDisplay && 
+      <CityDisplay displayedCity={cityToDisplay}/>
+        }
 
       <Footer apiCallsLeft = {apiCallsLeft}/>
     </div>
