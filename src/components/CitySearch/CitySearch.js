@@ -75,7 +75,7 @@ function CitySearch({
           setCityToDisplay(currentCity);
         }}
       >
-        Fetch data
+        Display
       </button>
     </form>
   );
