@@ -28,7 +28,7 @@ function CitySelection({ setCityToDisplay, setApiCallsLeft }) {
   //   }
   // };
 
-  const [dropdownCities, setDropdownCities] = useState([]);
+  const [dropdownCities, setDropdownCities] = useState(null);
   // const [apiCallsLeft, setApiCallsLeft] = useState(getTodaysAPICalls());
   const [searchValue, setSearchValue] = useState("");
   const [currentCity, setCurrentCity] = useState(null);
@@ -44,7 +44,7 @@ function CitySelection({ setCityToDisplay, setApiCallsLeft }) {
 
   const getCities = (prefix) => {
     if (prefix === "") {
-      setDropdownCities([]);
+      setDropdownCities(null);
       return;
     }
     const searchPrefix = capitalize(prefix);
@@ -89,6 +89,8 @@ function CitySelection({ setCityToDisplay, setApiCallsLeft }) {
     setCityToDisplay(currentCity);
   };
 
+  console.log(!currentCity);
+
   return (
     <div className={"city-selection"}>
       <header className="city-selection__header">Select city</header>
@@ -104,7 +106,7 @@ function CitySelection({ setCityToDisplay, setApiCallsLeft }) {
         setDropdownCities={setDropdownCities}
       />
       {
-        !currentCity &&
+        !currentCity && dropdownCities &&
         (<CitySearchDropdown
           className={"city-selection__dropdown"}
           dropdownCities={dropdownCities}
