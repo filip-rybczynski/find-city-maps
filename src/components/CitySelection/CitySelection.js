@@ -7,6 +7,8 @@ import PropTypes from "prop-types";
 import capitalize from "./../../functions/capitalize";
 import debounce from "../../functions/debounce";
 
+import "./city-selection.scss";
+
 function CitySelection({ setCityToDisplay, setApiCallsLeft }) {
   // I want to have an initially chosen city here
   // As well as an array of fetched cities
@@ -89,6 +91,7 @@ function CitySelection({ setCityToDisplay, setApiCallsLeft }) {
 
   return (
     <div className={"city-selection"}>
+      <header className="city-selection__header">Select city</header>
       <CitySearch
         className={"city-selection__search"}
         searchValue={searchValue}

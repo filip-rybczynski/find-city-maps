@@ -1,9 +1,18 @@
 .dropdown {
-    margin: 0 7rem 0 0;
+    // position: absolute;
+    // top: calc(100% - 1rem);
+
+    margin: 0;
     padding: 0;
 
+        min-width: 400px;
+        width: calc(95% - 100px);
+
+    overflow: visible;
+
     background: white;
-    border-radius: 1.5rem;
+    border: 1px solid lightgray;
+    border-radius: 0.75rem;
 
     list-style: none;
     overflow: hidden;

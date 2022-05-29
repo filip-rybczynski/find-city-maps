@@ -50,7 +50,6 @@ function CitySearch({
 
   return (
     <form className="city-search">
-      <header className="city-search__header">Find city</header>
       <label className="city-search__label" htmlFor="city-search">
         City name
       </label>
