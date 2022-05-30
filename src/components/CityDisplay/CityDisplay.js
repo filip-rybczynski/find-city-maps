@@ -1,26 +1,21 @@
-import React, {useState} from 'react';
-import MapDisplay from '../MapDisplay/MapDisplay';
+import React, { useState } from "react";
+import MapDisplay from "../MapDisplay/MapDisplay";
+import CityInfo from "../CityInfo/CityInfo";
+import NearbyCities from "../NearbyCities/NearbyCities";
 
 import "./city-display.scss";
 
-function CityDisplay ({displayedCity}) {
+function CityDisplay({ displayedCity, setApiCallsLeft }) {
+  const [currentCity, setCurrentCity] = useState(null);
 
-    const [currentCity, setCurrentCity] = useState(null);
-
-    console.dir(displayedCity);
-
-return (
-<div className={"city-display"}>
-    <h2>{displayedCity.name}</h2>
-    {`Name: ${displayedCity.name},
-      Country: ${displayedCity.country}
-      Population: ${displayedCity.population}
-      Longitude: ${displayedCity.longitude}
-      Latitude: ${displayedCity.latitude}`}
-    <MapDisplay city={displayedCity} />
-</div>
-)
-
+  return (
+    <div className={"city-display"}>
+      <h2>{displayedCity.name}</h2>
+      <CityInfo city={displayedCity} />
+      <NearbyCities mainCity={displayedCity} setApiCallsLeft={setApiCallsLeft} y/>
+      <MapDisplay city={displayedCity} />
+    </div>
+  );
 }
 
 export default CityDisplay;

@@ -65,7 +65,7 @@ function App() {
         setApiCallsLeft = {setApiCallsLeft}
       />
       {cityToDisplay && 
-      <CityDisplay displayedCity={cityToDisplay}/>
+      <CityDisplay displayedCity={cityToDisplay} setApiCallsLeft={setApiCallsLeft}/>
         }
 
       <Footer apiCallsLeft = {apiCallsLeft}/>
