@@ -1,10 +1,10 @@
 import React from 'react';
 import './map-options.scss';
 
-function MapOptions ({cityName, resetCenter}) {
+function MapOptions ({city, resetCenter}) {
 return (
     <div>
-        <button onClick={resetCenter}>Back to {cityName}</button>
+        <button onClick={resetCenter}>Back to {city.name}</button>
     </div>
 )
 }

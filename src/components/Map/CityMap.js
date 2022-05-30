@@ -8,7 +8,7 @@ import {Map, View} from "ol";
 
 // import OLTileLayer from "ol/layer/Tile"; // a way to access directly. Otherwise, it's ol.layer.Tile
 
-const CityMap = ({ children, center, zoom = 2}) => {
+const CityMap = ({ children, center, zoom, setStateZoom, setStateCenter}) => {
 
   const mapRef = useRef();
 
@@ -33,9 +33,13 @@ const CityMap = ({ children, center, zoom = 2}) => {
       // target: mapRef.current
     };
 
-    console.log(options)
     // new OpenLayers Map object is created
     let mapObject = new Map(options);
+
+    mapObject.on('moveend',() => {
+      setStateZoom(mapObject.getView().getZoom());
+      setStateCenter(mapObject.getView().getCenter());
+    })
 
     // attaching the map to the currently chosen element
     mapObject.setTarget(mapRef.current);
