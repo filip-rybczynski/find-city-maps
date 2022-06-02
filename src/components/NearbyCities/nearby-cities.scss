@@ -1,5 +1,28 @@
 .nearby-cities {
-    display: inline-block;
+    width: 100%;
 
-    width: 30%;
+    display: flex;
+    justify-content: space-between;
+
+    & div {
+        flex-grow: 1;
+        margin: 0 8px;
+    }
+
+    &__buttons {
+    }
+
+    &__button {
+        & .active {
+            background: darkgray;
+        }
+    }
+
+    &__info {
+
+    }
+}
+
+.active {
+    background: darkgray;
 }
