@@ -5,14 +5,18 @@ import NearbyCities from "../NearbyCities/NearbyCities";
 
 import "./city-display.scss";
 
-function CityDisplay({ displayedCity, setApiCallsLeft }) {
+function CityDisplay({ displayedCity, setApiCallsLeft, setCityToDisplay }) {
   const [currentCity, setCurrentCity] = useState(null);
 
   return (
     <div className={"city-display"}>
       <h2>{displayedCity.name}</h2>
       <CityInfo city={displayedCity} />
-      <NearbyCities mainCity={displayedCity} setApiCallsLeft={setApiCallsLeft} y/>
+      <NearbyCities
+        mainCity={displayedCity}
+        setApiCallsLeft={setApiCallsLeft}
+        setCityToDisplay={setCityToDisplay}
+      />
       <MapDisplay city={displayedCity} />
     </div>
   );

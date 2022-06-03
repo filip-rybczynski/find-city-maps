@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./nearby-cities.scss";
 
-function NearbyCities({ mainCity, setApiCallsLeft }) {
+function NearbyCities({ mainCity, setApiCallsLeft, setCityToDisplay }) {
   const [nearbyCitiesArr, setNearbyCitiesArr] = useState([]);
   const [selectedCity, setSelectedCity] = useState(null);
   const [activeButton, setActiveButton] = useState(null);
@@ -29,11 +29,14 @@ function NearbyCities({ mainCity, setApiCallsLeft }) {
         return response.json();
       })
       .then((response) => {
-        if (response.data.length === 0) {
+
+        const data = response.data;
+
+        if (data.length === 0) {
           return;
         }
-
-        setNearbyCitiesArr(response.data);
+        
+        setNearbyCitiesArr(data);
       })
       .catch((err) => {
         console.log(err);
@@ -85,6 +88,7 @@ function NearbyCities({ mainCity, setApiCallsLeft }) {
         {!selectedCity ? (
           ""
         ) : (
+          <>
           <table className="nearby-cities__table">
             <tr>
               <td>Name</td>
@@ -103,6 +107,8 @@ function NearbyCities({ mainCity, setApiCallsLeft }) {
               <td>{selectedCity.distance * 1.608}</td>
             </tr>
           </table>
+          <button onClick={()=>{setCityToDisplay(selectedCity); setSelectedCity(null)}}>Set as main city</button>
+          </>
         )}
       </div>
     </div>

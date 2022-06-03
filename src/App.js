@@ -62,13 +62,17 @@ function App() {
       <h1 className={"main__header"}>City search</h1>
       <CitySelection
         setCityToDisplay={setCityToDisplay}
-        setApiCallsLeft = {setApiCallsLeft}
+        setApiCallsLeft={setApiCallsLeft}
       />
-      {cityToDisplay && 
-      <CityDisplay displayedCity={cityToDisplay} setApiCallsLeft={setApiCallsLeft}/>
-        }
+      {cityToDisplay && (
+        <CityDisplay
+          displayedCity={cityToDisplay}
+          setApiCallsLeft={setApiCallsLeft}
+          setCityToDisplay={setCityToDisplay}
+        />
+      )}
 
-      <Footer apiCallsLeft = {apiCallsLeft}/>
+      <Footer apiCallsLeft={apiCallsLeft} />
     </div>
   );
 }
