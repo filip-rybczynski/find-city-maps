@@ -14,7 +14,7 @@ function App() {
   // const [cities, setCities] = useState([]); // Let's move this lower
   const [apiCallsLeft, setApiCallsLeft] = useState(1000); // Also let's move lower
   // const [searchValue, setSearchValue] = useState(""); // Also let's move lower
-  const [cityToDisplay, setCityToDisplay] = useState();
+  const [cityToDisplay, setCityToDisplay] = useState(null);
 
   // const fetchOptions = {
   //   method: "GET",

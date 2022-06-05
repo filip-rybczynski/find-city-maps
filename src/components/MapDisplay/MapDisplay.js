@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import CityMap from './../Map/CityMap';
 import Layers from "../Layers/Layers";
 import TileLayer from "../Layers/TileLayer";
@@ -12,10 +12,15 @@ import OSM from 'ol/source/OSM.js';
 function MapDisplay ({city}) {
 
       // the default projection for OpenLayers is the Spherical Mercator projection, for which we need to perform a conversion from longitude and latitude values received from props
-    const mercatorCoords = fromLonLat([city.longitude, city.latitude])
+      const mercatorCoords = fromLonLat([city.longitude, city.latitude])
+      const [center, setStateCenter] = useState(mercatorCoords)
+      
+      const [zoom, setStateZoom] = useState(9); // I might want to modify zoom interactively  later on
 
-    const [zoom, setStateZoom] = useState(9); // I might want to modify zoom interactively  later on
-    const [center, setStateCenter] = useState(mercatorCoords)
+      // To ensure center is updated when displayed city changes ("city" in props)
+useEffect(()=> {
+    setStateCenter(fromLonLat([city.longitude, city.latitude]));
+}, [city])
 
 const resetCenter = () => {
     setStateZoom(9);
