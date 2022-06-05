@@ -63,7 +63,7 @@ function CitySearch({
         />
         {currentCity && (
           <span className={"city-search__country-tag"}>
-            {`(${shortenNames(currentCity.country)})`}
+            {searchValue && `(${shortenNames(currentCity.country)})`}
           </span>
         )}
       </div>
@@ -73,6 +73,7 @@ function CitySearch({
         onClick={(e) => {
           e.preventDefault();
           setCityToDisplay(currentCity);
+          setSearchValue("");
         }}
       >
         Display
