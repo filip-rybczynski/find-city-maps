@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./nearby-cities.scss";
 
-function NearbyCities({ mainCity, setApiCallsLeft, setCityToDisplay }) {
+function NearbyCities({ mainCity, setApiCallsLeft, setCityToDisplay,setNearbyCity, nearbyCity }) {
   const [nearbyCitiesArr, setNearbyCitiesArr] = useState([]);
-  const [selectedCity, setSelectedCity] = useState(null);
   const [activeButton, setActiveButton] = useState(null);
 
   const fetchOptions = {
@@ -48,10 +47,11 @@ function NearbyCities({ mainCity, setApiCallsLeft, setCityToDisplay }) {
 
     if (activeButton !== city.id) {
       setActiveButton(city.id);
-      setSelectedCity(city);
+      setNearbyCity(city);
     } else {
       setActiveButton(null);
-      setSelectedCity(null);
+      setNearbyCity(null);
+
     }
   };
 
@@ -85,29 +85,29 @@ function NearbyCities({ mainCity, setApiCallsLeft, setCityToDisplay }) {
         ))}
       </div>
       <div className="nearby-cities__info">
-        {!selectedCity ? (
+        {!nearbyCity ? (
           ""
         ) : (
           <>
           <table className="nearby-cities__table">
             <tr>
               <td>Name</td>
-              <td>{selectedCity.name}</td>
+              <td>{nearbyCity.name}</td>
             </tr>
             <tr>
               <td>Region</td>
-              <td>{selectedCity.region}</td>
+              <td>{nearbyCity.region}</td>
             </tr>
             <tr>
               <td>Population</td>
-              <td>{selectedCity.population}</td>
+              <td>{nearbyCity.population}</td>
             </tr>
             <tr>
               <td>Distance (km)</td>
-              <td>{selectedCity.distance * 1.608}</td>
+              <td>{nearbyCity.distance * 1.608}</td>
             </tr>
           </table>
-          <button onClick={()=>{setCityToDisplay(selectedCity); setSelectedCity(null)}}>Set as main city</button>
+          <button onClick={()=>{setCityToDisplay(nearbyCity); setNearbyCity(null)}}>Set as main city</button>
           </>
         )}
       </div>
