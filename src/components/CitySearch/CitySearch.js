@@ -1,10 +1,12 @@
+// React
 import React, { useCallback } from "react";
-
 import PropTypes from "prop-types";
 
+// helper functions
 import debounce from "../../functions/debounce";
 import shortenNames from "../../functions/shortenNames";
 
+// styles
 import "./city-search.scss";
 
 function CitySearch({
@@ -23,30 +25,29 @@ function CitySearch({
   const debouncedGetCities = useCallback(debounce(getCities), []);
 
   const handleInputChange = (e) => {
+    // 1. prevent default form/input behaviour
     e.preventDefault();
-    // 1. Update controlled input value via state update
+
+    // 2. Update controlled input value via state update
     setSearchInputValue(e.target.value);
 
-    // 2. Clear currentCity, to show dropdown list again (and remove country tag)
+    // 3. Since we are searching for cities again, clear currentCity. This will show dropdown list again and remove the country tag visible in the input field
     setCurrentCity(null);
 
-    // 2. Fetch cities for dropdown list
+    // 4. Fetch cities for dropdown list
     debouncedGetCities(e.target.value);
   };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
+  const handleSubmit = (e) => {
+    // 1. prevent default form/input behaviour
+    e.preventDefault();
 
-  //   if (searchCityId) {
-  //     setconfirmCityId(searchCityId);
-  //     // also we need something here to disappear the dropdown (so wiping the dropdownCities)
-  //     return;
-  //   }
+    // 2. set main city for the app to display
+    setMainCity(currentCity);
 
-  //   // should be only fetchCities so that it doesn't update the city list, just gets the first value
-  //   getCities();
-
-  // }
+    // 3. clear out the search input field
+    setSearchInputValue("");
+  };
 
   return (
     <form className="city-search">
@@ -61,21 +62,17 @@ function CitySearch({
           value={searchInputValue}
           onChange={handleInputChange}
         />
-        {currentCity && (
-          <span className={"city-search__country-tag"}>
-            {searchInputValue && `(${shortenNames(currentCity.country)})`}
-          </span>
-        )}
+        {
+          // country tag to clarify which country the city's from
+          currentCity && (
+            <span className={"city-search__country-tag"}>
+              {searchInputValue && `(${shortenNames(currentCity.country)})`}
+            </span>
+          )
+        }
       </div>
 
-      <button
-        className={"city-search__button"}
-        onClick={(e) => {
-          e.preventDefault();
-          setMainCity(currentCity);
-          setSearchInputValue("");
-        }}
-      >
+      <button className={"city-search__button"} onClick={handleSubmit}>
         Display
       </button>
     </form>
