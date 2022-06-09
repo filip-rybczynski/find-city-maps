@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import CitySearch from "./../CitySearch/CitySearch";
 import CitySearchDropdown from "../CitySearchDropdown/CitySearchDropdown";
-import APICallCounter from "../APICallCounter/APICallCounter";
 import PropTypes from "prop-types";
 
 import capitalize from "./../../functions/capitalize";
-import debounce from "../../functions/debounce";
 
 import "./city-selection.scss";
 
@@ -67,6 +65,7 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
         return response.json();
       })
       .then((response) => {
+
         if (response.data.length === 0) {
           return;
         }
@@ -74,6 +73,9 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
         const cities = response.data.filter((city) => {
           return city.type === "CITY" && city.name.startsWith(searchPrefix);
         });
+        if (cities.length === 0) {
+          return;
+        }
         setDropdownCities(cities);
       })
       .catch((err) => console.error(err));
