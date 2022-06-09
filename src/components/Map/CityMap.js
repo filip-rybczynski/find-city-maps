@@ -3,6 +3,9 @@ import "./city-map.scss";
 import MapContext from "./MapContext";
 
 import {Map, View} from "ol";
+import {ScaleLine, defaults as defaultControls} from 'ol/control';
+import 'ol/ol.css';
+
 // import OSM from 'ol/source/OSM.js';
 // import TileLayer from "ol/layer/Tile";
 
@@ -13,6 +16,23 @@ const CityMap = ({ children, center, zoom, setStateZoom, setStateCenter}) => {
   const mapRef = useRef();
 
   const [map, setMap] = useState(null);
+
+  // function scaleControl() {
+  //   if (scaleType === 'scaleline') {
+  //     control = new ScaleLine({
+  //       units: unitsSelect.value,
+  //     });
+  //     return control;
+  //   }
+  //   control = new ScaleLine({
+  //     units: unitsSelect.value,
+  //     bar: true,
+  //     steps: scaleBarSteps,
+  //     text: scaleBarText,
+  //     minWidth: 140,
+  //   });
+  //   return control;
+  // }
 
   // any useEffect function runs each time an update happens to the React component
 
@@ -28,7 +48,9 @@ const CityMap = ({ children, center, zoom, setStateZoom, setStateCenter}) => {
         //   source: new OSM(),
         // }),
       ],
-      controls: [],
+      controls: defaultControls().extend([new ScaleLine({
+        units: "metric",
+      })]),
       // overlays:[],
       // target: mapRef.current
     };
@@ -67,7 +89,8 @@ const CityMap = ({ children, center, zoom, setStateZoom, setStateCenter}) => {
   return (
     <MapContext.Provider value={ map }> 
     {/* Passing the ref to the div, so that's where the map will display */}
-      <div ref={mapRef} className="city-map">
+    {/* tabindex to improve accessibility (map can be panned using arrows and +/- control zoom) */}
+      <div ref={mapRef} className="city-map" tabIndex="0"> 
         {children}
       </div>
     </MapContext.Provider>
