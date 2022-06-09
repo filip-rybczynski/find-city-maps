@@ -1,10 +1,10 @@
 // React
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 
 // components
 import CitySearch from "./../CitySearch/CitySearch";
 import CitySearchDropdown from "../CitySearchDropdown/CitySearchDropdown";
-import PropTypes from "prop-types";
 
 // helper functions
 import capitalize from "./../../functions/capitalize";
@@ -81,7 +81,6 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
         // only display dropdown when (1) there is no current selection and (2) there is a list of cities to display (fetching returns an array)
       !currentCity && dropdownCities &&
         <CitySearchDropdown
-          className={"city-selection__dropdown"}
           dropdownCities={dropdownCities}
           setSearchInputValue={setSearchInputValue}
           setCurrentCity={setCurrentCity}
