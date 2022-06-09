@@ -9,7 +9,7 @@ import debounce from "../../functions/debounce";
 
 import "./city-selection.scss";
 
-function CitySelection({ setCityToDisplay, setApiCallsLeft }) {
+function CitySelection({ setMainCity, setApiCallsLeft }) {
   // I want to have an initially chosen city here
   // As well as an array of fetched cities
 
@@ -86,7 +86,7 @@ function CitySelection({ setCityToDisplay, setApiCallsLeft }) {
   // };
 
   const confirmCity = () => {
-    setCityToDisplay(currentCity);
+    setMainCity(currentCity);
   };
 
   console.log(!currentCity);
@@ -102,7 +102,7 @@ function CitySelection({ setCityToDisplay, setApiCallsLeft }) {
         setSearchValue={setSearchValue}
         setCurrentCity={setCurrentCity}
         confirmCity={confirmCity}
-        setCityToDisplay={setCityToDisplay}
+        setMainCity={setMainCity}
         setDropdownCities={setDropdownCities}
       />
       {
@@ -145,7 +145,7 @@ function CitySelection({ setCityToDisplay, setApiCallsLeft }) {
 }
 
 CitySelection.propTypes = {
-  setCityToDisplay: PropTypes.func,
+  setMainCity: PropTypes.func,
 };
 
 export default CitySelection;

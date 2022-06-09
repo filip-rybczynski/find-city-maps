@@ -5,27 +5,27 @@ import NearbyCities from "../NearbyCities/NearbyCities";
 
 import "./city-display.scss";
 
-function CityDisplay({ displayedCity, setApiCallsLeft, setCityToDisplay }) {
+function CityDisplay({ mainCity, setApiCallsLeft, setMainCity }) {
   // const [currentCity, setCurrentCity] = useState(null);
   const [nearbyCity, setNearbyCity] = useState(null);
 
   // Whenever the main city displayed changes, we should clear any selected nearby city
   useEffect(() => {
     setNearbyCity(null)
-  }, [displayedCity]);
+  }, [mainCity]);
 
   return (
     <div className={"city-display"}>
-      <h2>{displayedCity.name}</h2>
-      <CityInfo city={displayedCity} />
+      <h2>{mainCity.name}</h2>
+      <CityInfo city={mainCity} />
       <NearbyCities
-        mainCity={displayedCity}
+        mainCity={mainCity}
         nearbyCity={nearbyCity}
         setApiCallsLeft={setApiCallsLeft}
-        setCityToDisplay={setCityToDisplay}
+        setMainCity={setMainCity}
         setNearbyCity={setNearbyCity}
       />
-      <MapDisplay city={displayedCity} nearbyCity={nearbyCity}/>
+      <MapDisplay city={mainCity} nearbyCity={nearbyCity}/>
     </div>
   );
 }

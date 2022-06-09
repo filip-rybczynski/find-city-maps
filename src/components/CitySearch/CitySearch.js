@@ -12,7 +12,7 @@ function CitySearch({
   setSearchValue,
   getCities,
   currentCity,
-  setCityToDisplay,
+  setMainCity,
   setCurrentCity,
 }) {
   // useCallback used to ensure the debounced function references the same function across renders
@@ -72,7 +72,7 @@ function CitySearch({
         className={"city-search__button"}
         onClick={(e) => {
           e.preventDefault();
-          setCityToDisplay(currentCity);
+          setMainCity(currentCity);
           setSearchValue("");
         }}
       >
@@ -87,7 +87,7 @@ CitySearch.propTypes = {
   setSearchValue: PropTypes.func,
   currentCity: PropTypes.object,
   getCities: PropTypes.func,
-  setCityToDisplay: PropTypes.func,
+  setMainCity: PropTypes.func,
   setCurrentCity: PropTypes.func,
 };
 
