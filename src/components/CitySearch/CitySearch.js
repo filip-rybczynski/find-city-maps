@@ -8,8 +8,8 @@ import shortenNames from "../../functions/shortenNames";
 import "./city-search.scss";
 
 function CitySearch({
-  searchValue,
-  setSearchValue,
+  searchInputValue,
+  setSearchInputValue,
   getCities,
   currentCity,
   setMainCity,
@@ -25,7 +25,7 @@ function CitySearch({
   const handleInputChange = (e) => {
     e.preventDefault();
     // 1. Update controlled input value via state update
-    setSearchValue(e.target.value);
+    setSearchInputValue(e.target.value);
 
     // 2. Clear currentCity, to show dropdown list again (and remove country tag)
     setCurrentCity(null);
@@ -38,7 +38,7 @@ function CitySearch({
   //   e.preventDefault();
 
   //   if (searchCityId) {
-  //     setDisplayCityId(searchCityId);
+  //     setconfirmCityId(searchCityId);
   //     // also we need something here to disappear the dropdown (so wiping the dropdownCities)
   //     return;
   //   }
@@ -58,12 +58,12 @@ function CitySearch({
           className={"city-search__input"}
           id="city-search"
           name="city-search"
-          value={searchValue}
+          value={searchInputValue}
           onChange={handleInputChange}
         />
         {currentCity && (
           <span className={"city-search__country-tag"}>
-            {searchValue && `(${shortenNames(currentCity.country)})`}
+            {searchInputValue && `(${shortenNames(currentCity.country)})`}
           </span>
         )}
       </div>
@@ -73,7 +73,7 @@ function CitySearch({
         onClick={(e) => {
           e.preventDefault();
           setMainCity(currentCity);
-          setSearchValue("");
+          setSearchInputValue("");
         }}
       >
         Display
@@ -83,8 +83,8 @@ function CitySearch({
 }
 
 CitySearch.propTypes = {
-  searchValue: PropTypes.string,
-  setSearchValue: PropTypes.func,
+  searchInputValue: PropTypes.string,
+  setSearchInputValue: PropTypes.func,
   currentCity: PropTypes.object,
   getCities: PropTypes.func,
   setMainCity: PropTypes.func,

@@ -4,11 +4,11 @@ import PropTypes from "prop-types";
 
 import "./dropdown-item.scss";
 
-function DropdownItem({ setCurrentCity, setSearchValue, city }) {
+function DropdownItem({ setCurrentCity, setSearchInputValue, city }) {
   const chooseOption = () => {
     setCurrentCity(city);
 
-    setSearchValue(city.name);
+    setSearchInputValue(city.name);
   };
 
   return (
@@ -22,7 +22,7 @@ function DropdownItem({ setCurrentCity, setSearchValue, city }) {
 
 DropdownItem.propTypes = {
   setCurrentCity: PropTypes.func,
-  setSearchValue: PropTypes.func,
+  setSearchInputValue: PropTypes.func,
   city: PropTypes.object,
 };
 

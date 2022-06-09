@@ -1,36 +1,22 @@
+// React
 import React, { useState } from "react";
+
+// components
 import CitySearch from "./../CitySearch/CitySearch";
 import CitySearchDropdown from "../CitySearchDropdown/CitySearchDropdown";
 import PropTypes from "prop-types";
 
+// helper functions
 import capitalize from "./../../functions/capitalize";
 
+// styles
 import "./city-selection.scss";
 
 function CitySelection({ setMainCity, setApiCallsLeft }) {
-  // I want to have an initially chosen city here
-  // As well as an array of fetched cities
-
-  // const getTodaysAPICalls = () => {
-  //   // constant used to track the API call limit (which resets each day)
-  //   const today = new Date().toLocaleDateString();
-
-  //   let todaysAPICalls = localStorage.getItem(`apiCallsLeftFor${today}`);
-
-  //   if (todaysAPICalls) {
-  //     return todaysAPICalls;
-  //   } else {
-  //     // removing previous API call number records for tidiness
-  //     localStorage.clear();
-  //     return 1000;
-  //   }
-  // };
-
-  const [dropdownCities, setDropdownCities] = useState(null);
-  // const [apiCallsLeft, setApiCallsLeft] = useState(getTodaysAPICalls());
-  const [searchValue, setSearchValue] = useState("");
-  const [currentCity, setCurrentCity] = useState(null);
-  // const [inputError, setInputError] = useState('');
+  const [dropdownCities, setDropdownCities] = useState(null); // list of cities that appear in the search input field's dropdown
+  const [searchInputValue, setSearchInputValue] = useState(""); // value of search input (controlled input)
+  const [currentCity, setCurrentCity] = useState(null); // current city selected in the input (data already fetched)
+  // const [inputError, setInputError] = useState(''); // TODO
 
   const fetchOptions = {
     method: "GET",
@@ -49,6 +35,7 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
 
     // Params must be part of the URL due to limitations of the fetch API
     // https://github.com/github/fetch/issues/256
+    // I don't need to change parameters in this function, so no issues
     fetch(
       `https://wft-geo-db.p.rapidapi.com/v1/geo/cities?minPopulation=100000&limit=10&sort=-population&namePrefix=${searchPrefix}`,
       fetchOptions
@@ -58,15 +45,12 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
           "x-ratelimit-requests-remaining"
         );
         setApiCallsLeft(callsRemaining);
-        localStorage.setItem(
-          `apiCallsLeftFor${new Date().toLocaleDateString()}`,
-          callsRemaining
-        );
+
         return response.json();
       })
       .then((response) => {
-
         if (response.data.length === 0) {
+          setDropdownCities(null);
           return;
         }
 
@@ -74,6 +58,7 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
           return city.type === "CITY" && city.name.startsWith(searchPrefix);
         });
         if (cities.length === 0) {
+          setDropdownCities(null);
           return;
         }
         setDropdownCities(cities);
@@ -81,73 +66,34 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
       .catch((err) => console.error(err));
   };
 
-  // const getCities = () => {
-  //   console.log('fetchCities');
-
-  //   setApiCallsLeft(apiCallsLeft - 1);
-  // };
-
-  const confirmCity = () => {
-    setMainCity(currentCity);
-  };
-
-  console.log(!currentCity);
-
   return (
     <div className={"city-selection"}>
       <header className="city-selection__header">Select city</header>
       <CitySearch
-        className={"city-selection__search"}
-        searchValue={searchValue}
+        searchInputValue={searchInputValue}
         currentCity={currentCity}
         getCities={getCities}
-        setSearchValue={setSearchValue}
+        setSearchInputValue={setSearchInputValue}
         setCurrentCity={setCurrentCity}
-        confirmCity={confirmCity}
         setMainCity={setMainCity}
-        setDropdownCities={setDropdownCities}
       />
       {
-        !currentCity && dropdownCities &&
-        (<CitySearchDropdown
+        // only display dropdown when (1) there is no current selection and (2) there is a list of cities to display (fetching returns an array)
+      !currentCity && dropdownCities &&
+        <CitySearchDropdown
           className={"city-selection__dropdown"}
           dropdownCities={dropdownCities}
-          setSearchValue={setSearchValue}
+          setSearchInputValue={setSearchInputValue}
           setCurrentCity={setCurrentCity}
-        />)
+        />
       }
-      
-      {/* <APICallCounter
-        className={"city-selection__api-counter"}
-        callsRemaining={apiCallsLeft}
-      ></APICallCounter> */}
     </div>
   );
-
-  // return (
-  //   <>
-  //     <form>
-  //       <label htmlFor="city-name-search">Search city</label>
-  //       <input
-  //         list="city-names"
-  //         id="city-name-search"
-  //         name="city-name-search"
-  //         value={props.searchedName}
-  //         onChange={props.handleCitySearch}
-  //       />
-  //       <datalist id="city-names">
-  //         {props.cities.map(city => (
-  //           <option key={city.id} value={`${city.name}, ${city.country}`} />
-  //           ))}
-  //       </datalist>
-  //       <button onClick={props.handleChoice}>Select</button>
-  //     </form>
-  //   </>
-  // );
 }
 
 CitySelection.propTypes = {
   setMainCity: PropTypes.func,
+  setApiCallsLeft: PropTypes.func,
 };
 
 export default CitySelection;

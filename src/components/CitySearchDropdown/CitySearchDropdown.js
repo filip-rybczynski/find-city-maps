@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import "./city-search-dropdown.scss";
 
-function CitySearchDropdown({ dropdownCities, setCurrentCity, setSearchValue }) {
+function CitySearchDropdown({ dropdownCities, setCurrentCity, setSearchInputValue }) {
 
   const chooseFocusedOption = (e) => {
     let keycode = e.keyCode ? e.keyCode : e.which;
@@ -24,7 +24,7 @@ function CitySearchDropdown({ dropdownCities, setCurrentCity, setSearchValue }) 
             key={city.id}
             city={city}
             setCurrentCity={setCurrentCity}
-            setSearchValue={setSearchValue}
+            setSearchInputValue={setSearchInputValue}
 
             className={'dropdown__item'}
           >
@@ -37,7 +37,7 @@ function CitySearchDropdown({ dropdownCities, setCurrentCity, setSearchValue }) 
 
 CitySearchDropdown.propTypes = {
   dropdownCities: PropTypes.array,
-  setSearchValue: PropTypes.func,
+  setSearchInputValue: PropTypes.func,
   setCurrentCity:PropTypes.func,
 }
 
