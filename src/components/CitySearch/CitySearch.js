@@ -1,5 +1,5 @@
 // React
-import React, { useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 
 // helper functions
@@ -17,6 +17,8 @@ function CitySearch({
   setMainCity,
   setCurrentCity,
 }) {
+  const [isInputDisabled, setIsInputDisabled] = useState(false);
+
   // useCallback used to ensure the debounced function references the same function across renders
   // https://www.freecodecamp.org/news/debounce-and-throttle-in-react-with-hooks/
   // https://dmitripavlutin.com/react-throttle-debounce/
@@ -47,6 +49,14 @@ function CitySearch({
 
     // 3. clear out the search input field
     setSearchInputValue("");
+
+    // 4. disable input to block fetching search results and avoid conflict with neighbouring city fetching - due to free API access limitations, only 1 request per second is permitted
+    setIsInputDisabled(true);
+
+    // 5. enable input after safe time has passed (0.5s would be sufficient, but it's very fast and gives an almost 'flicker' effect, 1s looks better)
+    setTimeout(() => {
+      setIsInputDisabled(false);
+    }, 1000);
   };
 
   return (
@@ -61,6 +71,7 @@ function CitySearch({
           name="city-search"
           value={searchInputValue}
           onChange={handleInputChange}
+          disabled={isInputDisabled}
         />
         {
           // country tag to clarify which country the city's from
