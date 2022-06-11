@@ -76,8 +76,10 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
         setSearchInputValue={setSearchInputValue}
         setCurrentCity={setCurrentCity}
         setMainCity={setMainCity}
+        // below are for CitySearchDropdown only - maybe can be moved below?
+        dropdownCities={dropdownCities}
       />
-      {
+      {/* {
         // only display dropdown when (1) there is no current selection and (2) there is a list of cities to display (fetching returns an array)
       !currentCity && dropdownCities &&
         <CitySearchDropdown
@@ -85,7 +87,7 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
           setSearchInputValue={setSearchInputValue}
           setCurrentCity={setCurrentCity}
         />
-      }
+      } */}
     </div>
   );
 }

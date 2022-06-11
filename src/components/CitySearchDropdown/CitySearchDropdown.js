@@ -9,7 +9,6 @@ function CitySearchDropdown({ dropdownCities, setCurrentCity, setSearchInputValu
 
   const chooseFocusedOption = (e) => {
     let keycode = e.keyCode ? e.keyCode : e.which;
-    console.log(keycode, e.which);
     if (keycode === 13 || keycode === 32) {
       document.activeElement.click();
       // Worth considering:
@@ -25,11 +24,7 @@ function CitySearchDropdown({ dropdownCities, setCurrentCity, setSearchInputValu
             city={city}
             setCurrentCity={setCurrentCity}
             setSearchInputValue={setSearchInputValue}
-
-            className={'dropdown__item'}
-          >
-              {/* {`${city.name} (${city.country})`} */}
-          </DropdownItem>
+          />
         ))}
       </ul>
   );

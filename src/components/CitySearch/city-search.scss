@@ -7,15 +7,27 @@
     }
 
     &__search-bar {
-        display: inline-block;
+        // switch to flex display to position input + button.
+        display: flex;
+        justify-content: space-between;
+
         position: relative; // for the country tag
-        min-width: 400px;
-        width: calc(95% - 100px);
 
         font-size: 1rem;
     }
 
+    &__input-container {
+        // for positioning the country tag
+        position: relative;
+        // width: 100%;
+
+        min-width: 400px;
+        width: calc(95% - 100px);
+
+    }
+
     &__input {
+        position: relative;
 
         width: 100%;
         padding: 6px 12px;
@@ -41,10 +53,7 @@
     }
 
     &__button {
-        margin: 0 0 0 0;
         padding: 0.3rem 0.5rem 0.2rem;
-        
-        margin-left: 5%;
 
         width: 100px;
         height: 2.2rem;

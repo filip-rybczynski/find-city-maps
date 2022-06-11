@@ -2,6 +2,9 @@
 import React, { useState, useCallback } from "react";
 import PropTypes from "prop-types";
 
+// components
+import CitySearchDropdown from "../CitySearchDropdown/CitySearchDropdown";
+
 // helper functions
 import debounce from "../../functions/debounce";
 import shortenNames from "../../functions/shortenNames";
@@ -16,6 +19,7 @@ function CitySearch({
   currentCity,
   setMainCity,
   setCurrentCity,
+  dropdownCities
 }) {
   const [isInputDisabled, setIsInputDisabled] = useState(false);
 
@@ -65,6 +69,7 @@ function CitySearch({
         City name
       </label>
       <div className="city-search__search-bar">
+        <div className="city-search__input-container">
         <input
           className={"city-search__input"}
           id="city-search"
@@ -81,11 +86,21 @@ function CitySearch({
             </span>
           )
         }
-      </div>
-
+        </div>
+      {
+        // only display dropdown when (1) there is no current selection and (2) there is a list of cities to display (fetching returns an array)
+      !currentCity && dropdownCities &&
+        <CitySearchDropdown
+          dropdownCities={dropdownCities}
+          setSearchInputValue={setSearchInputValue}
+          setCurrentCity={setCurrentCity}
+        />
+      }
       <button className={"city-search__button"} onClick={handleSubmit}>
         Display
       </button>
+      </div>
+
     </form>
   );
 }
