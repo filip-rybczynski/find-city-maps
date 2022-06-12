@@ -88,8 +88,10 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
     // 2. set main city for the app to display
     setMainCity(currentCity);
 
-    // 3. clear out the search input field
+    // 3. clear out the search input field, currentCity and dropdownlist
     setSearchInputValue("");
+    setCurrentCity(null);
+    setDropdownCities(null);
 
     // 4. disable input to block fetching search results and avoid conflict with neighbouring city fetching - due to free API access limitations, only 1 request per second is permitted
     setIsInputDisabled(true);
