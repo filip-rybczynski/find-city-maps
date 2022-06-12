@@ -1,12 +1,18 @@
+// React
 import React from "react";
+import PropTypes from "prop-types";
+
+// components
 import DropdownItem from "../DropdownItem/DropdownItem";
 
-import PropTypes from 'prop-types';
-
+// styles
 import "./city-search-dropdown.scss";
 
-function CitySearchDropdown({ dropdownCities, setCurrentCity, setSearchInputValue }) {
-
+function CitySearchDropdown({
+  dropdownCities,
+  setCurrentCity,
+  setSearchInputValue,
+}) {
   const chooseFocusedOption = (e) => {
     let keycode = e.keyCode ? e.keyCode : e.which;
     if (keycode === 13 || keycode === 32) {
@@ -17,8 +23,9 @@ function CitySearchDropdown({ dropdownCities, setCurrentCity, setSearchInputValu
   };
 
   return (
-      <ul className={"dropdown"} onKeyPress={chooseFocusedOption}>
-        {dropdownCities && dropdownCities.map((city) => (
+    <ul className={"dropdown"} onKeyPress={chooseFocusedOption}>
+      {dropdownCities &&
+        dropdownCities.map((city) => (
           <DropdownItem
             key={city.id}
             city={city}
@@ -26,14 +33,14 @@ function CitySearchDropdown({ dropdownCities, setCurrentCity, setSearchInputValu
             setSearchInputValue={setSearchInputValue}
           />
         ))}
-      </ul>
+    </ul>
   );
 }
 
 CitySearchDropdown.propTypes = {
   dropdownCities: PropTypes.array,
   setSearchInputValue: PropTypes.func,
-  setCurrentCity:PropTypes.func,
-}
+  setCurrentCity: PropTypes.func,
+};
 
 export default CitySearchDropdown;
