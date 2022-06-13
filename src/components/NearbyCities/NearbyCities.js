@@ -77,7 +77,7 @@ function NearbyCities({
     <div className={"nearby-cities"}>
       {/* Found nearby cities */}
       <div className={"nearby-cities__buttons"}>
-        {nearbyCitiesArr.map((city) => (
+        {nearbyCitiesArr && nearbyCitiesArr.map((city) => (
           <button
             key={city.id}
             onClick={(e) => handleClick(e, city)}
