@@ -1,8 +1,21 @@
+// React
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+
+// Components
+import CityInfo from "../CityInfo/CityInfo";
+
+// styles
 import "./nearby-cities.scss";
 
-function NearbyCities({ mainCity, setApiCallsLeft, setMainCity,setNearbyCity, nearbyCity }) {
-  const [nearbyCitiesArr, setNearbyCitiesArr] = useState([]);
+function NearbyCities({
+  nearbyCity,
+  mainCity,
+  setApiCallsLeft,
+  setMainCity,
+  setNearbyCity,
+}) {
+  const [nearbyCitiesArr, setNearbyCitiesArr] = useState(null);
   const [activeButton, setActiveButton] = useState(null);
 
   const fetchOptions = {
@@ -28,14 +41,9 @@ function NearbyCities({ mainCity, setApiCallsLeft, setMainCity,setNearbyCity, ne
         return response.json();
       })
       .then((response) => {
+        const nearbyCities = response.data;
 
-        const data = response.data;
-
-        if (data.length === 0) {
-          return;
-        }
-        
-        setNearbyCitiesArr(data);
+        setNearbyCitiesArr(nearbyCities.length > 0 ? nearbyCities : null);
       })
       .catch((err) => {
         console.log(err);
@@ -51,22 +59,23 @@ function NearbyCities({ mainCity, setApiCallsLeft, setMainCity,setNearbyCity, ne
     } else {
       setActiveButton(null);
       setNearbyCity(null);
-
     }
   };
 
+  // Delay implemented to stay within 1 request per sec limit of API
   useEffect(() => {
     setTimeout(() => {
       getNearbyCities(mainCity.id);
     }, 500);
 
     return function () {
-      setNearbyCitiesArr([]);
+      setNearbyCitiesArr(null);
     };
   }, [mainCity]);
 
   return (
     <div className={"nearby-cities"}>
+      {/* Found nearby cities */}
       <div className={"nearby-cities__buttons"}>
         {nearbyCitiesArr.map((city) => (
           <button
@@ -76,7 +85,7 @@ function NearbyCities({ mainCity, setApiCallsLeft, setMainCity,setNearbyCity, ne
               city.id === activeButton ? "active" : ""
             }`}
           >
-            {/* using closure with 'city' in handleClick */}
+            {/* Button text content */}
             {city.name}
             {city.countryCode !== mainCity.countryCode
               ? ` (${city.countryCode})`
@@ -84,35 +93,38 @@ function NearbyCities({ mainCity, setApiCallsLeft, setMainCity,setNearbyCity, ne
           </button>
         ))}
       </div>
+      {/* Information for selected nearby city (can be empty if none selected) */}
       <div className="nearby-cities__info">
         {!nearbyCity ? (
           ""
         ) : (
           <>
-          <table className="nearby-cities__table">
-            <tr>
-              <td>Name</td>
-              <td>{nearbyCity.name}</td>
-            </tr>
-            <tr>
-              <td>Region</td>
-              <td>{nearbyCity.region}</td>
-            </tr>
-            <tr>
-              <td>Population</td>
-              <td>{nearbyCity.population}</td>
-            </tr>
-            <tr>
-              <td>Distance (km)</td>
-              <td>{nearbyCity.distance * 1.608}</td>
-            </tr>
-          </table>
-          <button onClick={()=>{setMainCity(nearbyCity); setNearbyCity(null)}}>Set as main city</button>
+            <h3>{nearbyCity.name}</h3>
+            <CityInfo
+              city={nearbyCity}
+              dontShowCountry={nearbyCity.countryCode === mainCity.countryCode}
+            />
+            <button
+              onClick={() => {
+                setMainCity(nearbyCity);
+                setNearbyCity(null);
+              }}
+            >
+              Set as main city
+            </button>
           </>
         )}
       </div>
     </div>
   );
 }
+
+NearbyCities.propTypes = {
+  nearbyCity: PropTypes.object,
+  mainCity: PropTypes.object,
+  setApiCallsLeft: PropTypes.func,
+  setMainCity: PropTypes.func,
+  setNearbyCity: PropTypes.func,
+};
 
 export default NearbyCities;
