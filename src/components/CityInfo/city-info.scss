@@ -1,5 +1,29 @@
 .city-info {
-    display: inline-block;
+  display: inline-block;
 
-    width: 50%;
+  width: 100%;
+
+  background: lightgray;
+
+
+  & table {
+    width: 100%;
+    border-collapse: collapse;
+    & td {
+      padding-left: 12px;
+    }
+
+    & td:first-of-type {
+      width: 30%;
+
+      font-weight: bold;
+    }
+    & td:last-of-type {
+      width: 70%;
+    }
+
+    & tr:nth-of-type(odd) {
+        background: darkgrey;
+    }
+  }
 }

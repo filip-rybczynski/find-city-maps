@@ -8,4 +8,32 @@
     border-radius: 1rem;
     
         background: rgb(247, 247, 247);
+
+        &__information {
+            // min-height: 250px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+        }
+        
+        &__general-info {
+            width: 40%;
+
+            border-radius: 0.8rem;
+
+            background: lightgray;
+
+    overflow: hidden;
+
+        }
+
+        &__info-header {
+            margin: 1rem 0.5rem;
+        }
+
+        &__nearby-cities {
+            width: 60%;
+        }
 }

@@ -1,28 +1,80 @@
 .nearby-cities {
-    width: 100%;
+  display: flex;
+  justify-content: space-between;
 
+
+  &__buttons {
+    position: relative;
     display: flex;
-    justify-content: space-between;
 
-    & div {
-        flex-grow: 1;
-        margin: 0 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+
+    background: hotpink;
+    width: 35%;
+    margin: 0 8px;
+
+    border-radius: 0.8rem;
+
+    background: lightgray;
+  }
+
+  &__header {
+    margin: 1rem 0 0.25rem;
+    width: 100%;
+    text-align: center;
+  }
+
+  &__button {
+    // flex:1 0 auto;
+
+    padding: 1px 8px;
+
+    border: solid 1px;
+    // border-radius: 0.5rem;
+
+    padding: 0.2rem 0.35rem 0.15rem;
+    border-radius: 0.5rem;
+
+    font-size: 0.8rem;
+
+    &.active {
+      background: darkgray;
     }
+  }
 
-    &__buttons {
-    }
-
-    &__button {
-        & .active {
-            background: darkgray;
-        }
-    }
-
-    &__info {
-
-    }
+  &__info {
+    position: relative;
+    width: 65%;
+  }
 }
 
-.active {
-    background: darkgray;
+.details {
+
+    &.visible {
+        border-radius: 0.8rem;
+
+        background: lightgray;
+    }
+    
+  &__header {
+    display: inline-block;
+    width: 60%;
+    margin: 1rem 0.5rem;
+  }
+
+  &__change-button {
+    display: inline-block;
+
+    max-width: 20%;
+    min-width: 140px;
+
+    padding: 0.2rem 0.35rem 0.15rem;
+    height: 1.8rem;
+    border-radius: 0.8rem;
+
+    font-size: 0.9rem;
+    font-weight: bold;
+  }
 }

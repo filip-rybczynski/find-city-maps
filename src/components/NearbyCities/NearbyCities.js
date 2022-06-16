@@ -14,6 +14,7 @@ function NearbyCities({
   setApiCallsLeft,
   setMainCity,
   setNearbyCity,
+  className: cssClass
 }) {
   const [nearbyCitiesArr, setNearbyCitiesArr] = useState(null);
   const [activeButton, setActiveButton] = useState(null);
@@ -74,9 +75,12 @@ function NearbyCities({
   }, [mainCity]);
 
   return (
-    <div className={"nearby-cities"}>
+    <section className={`${cssClass} nearby-cities`}>
       {/* Found nearby cities */}
-      <div className={"nearby-cities__buttons"}>
+      <div className="nearby-cities__buttons">
+        <h3 className="nearby-cities__header">
+          Nearby cities
+        </h3>
         {nearbyCitiesArr && nearbyCitiesArr.map((city) => (
           <button
             key={city.id}
@@ -94,17 +98,13 @@ function NearbyCities({
         ))}
       </div>
       {/* Information for selected nearby city (can be empty if none selected) */}
-      <div className="nearby-cities__info">
+      <div className={`nearby-cities__info details ${!nearbyCity ? "" : "visible"}`}>
         {!nearbyCity ? (
           ""
         ) : (
           <>
-            <h3>{nearbyCity.name}</h3>
-            <CityInfo
-              city={nearbyCity}
-              dontShowCountry={nearbyCity.countryCode === mainCity.countryCode}
-            />
-            <button
+            <h3 className="details__header">{nearbyCity.name}</h3>
+                        <button className="details__change-button"
               onClick={() => {
                 setMainCity(nearbyCity);
                 setNearbyCity(null);
@@ -112,10 +112,15 @@ function NearbyCities({
             >
               Set as main city
             </button>
+            <CityInfo
+              city={nearbyCity}
+              dontShowCountry={nearbyCity.countryCode === mainCity.countryCode}
+            />
+
           </>
         )}
       </div>
-    </div>
+    </section>
   );
 }
 
@@ -125,6 +130,7 @@ NearbyCities.propTypes = {
   setApiCallsLeft: PropTypes.func,
   setMainCity: PropTypes.func,
   setNearbyCity: PropTypes.func,
+  className: PropTypes.string,
 };
 
 export default NearbyCities;

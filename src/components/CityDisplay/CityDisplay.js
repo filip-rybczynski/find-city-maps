@@ -10,7 +10,7 @@ import NearbyCities from "../NearbyCities/NearbyCities";
 // styles
 import "./city-display.scss";
 
-function CityDisplay ({ mainCity, setApiCallsLeft, setMainCity }) {
+function CityDisplay({ mainCity, setApiCallsLeft, setMainCity }) {
   const [nearbyCity, setNearbyCity] = useState(null);
 
   // Whenever the main city displayed changes, we should clear any selected nearby city
@@ -19,18 +19,26 @@ function CityDisplay ({ mainCity, setApiCallsLeft, setMainCity }) {
   }, [mainCity]);
 
   return (
-    <div className={"city-display"}>
+    <article className={"city-display"}>
       <h2>{mainCity.name}</h2>
-      <CityInfo city={mainCity} />
-      <NearbyCities
-        mainCity={mainCity}
-        nearbyCity={nearbyCity}
-        setApiCallsLeft={setApiCallsLeft}
-        setMainCity={setMainCity}
-        setNearbyCity={setNearbyCity}
-      />
+      <div className="city-display__information">
+        <section className="city-display__general-info">
+          <h3 className="city-display__info-header">General info</h3>
+          <CityInfo city={mainCity} />
+        </section>
+
+          <NearbyCities
+            mainCity={mainCity}
+            nearbyCity={nearbyCity}
+            setApiCallsLeft={setApiCallsLeft}
+            setMainCity={setMainCity}
+            setNearbyCity={setNearbyCity}
+            className="city-display__nearby-cities"
+          />
+
+      </div>
       <MapDisplay city={mainCity} nearbyCity={nearbyCity} />
-    </div>
+    </article>
   );
 }
 

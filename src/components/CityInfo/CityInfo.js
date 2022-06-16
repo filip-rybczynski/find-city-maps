@@ -16,9 +16,6 @@ function CityInfo({
     <div className="city-info">
       <table className="city-info__table">
         <tbody>
-          <thead>
-            <th colspan="2">General info</th>
-          </thead>
           {!dontShowCountry && (
             <tr>
               <td>Country</td>
@@ -39,8 +36,8 @@ function CityInfo({
           </tr>
           {distance && (
             <tr>
-              <td>Distance (km)</td>
-              <td>{(distance * 1.608).toFixed(3)}</td>
+              <td>Distance</td>
+              <td>{(distance * 1.608).toFixed(2)} km</td>
             </tr>
           )}
         </tbody>
