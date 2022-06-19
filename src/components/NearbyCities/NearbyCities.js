@@ -48,9 +48,7 @@ function NearbyCities({
 
   // Delay implemented to stay within 1 request per sec limit of API
   useEffect(() => {
-    setTimeout(() => {
       getNearbyCities(mainCity.id);
-    }, 1000);
 
     return function () {
       setNearbyCitiesArr(null);

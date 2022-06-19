@@ -77,14 +77,6 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
     setSearchInputValue("");
     setCurrentCity(null);
     setDropdownCities(null);
-
-    // 4. disable input to block fetching search results and avoid conflict with neighbouring city fetching - due to free API access limitations, only 1 request per second is permitted
-    setIsInputDisabled(true);
-
-    // 5. enable input after safe time has passed (0.5s would be sufficient, but it's very fast and gives an almost 'flicker' effect, 1s looks better)
-    setTimeout(() => {
-      setIsInputDisabled(false);
-    }, 1000);
   };
 
   return (
