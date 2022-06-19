@@ -9,6 +9,7 @@ import CitySearchDropdown from "../CitySearchDropdown/CitySearchDropdown";
 import debounce from "../../functions/debounce";
 import shortenNames from "../../functions/shortenNames";
 import capitalize from "./../../functions/capitalize";
+import fetchGeoDBdata from "../../functions/fetchGeoDBdata";
 
 // styles
 import "./city-selection.scss";
@@ -20,44 +21,27 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
   const [isInputDisabled, setIsInputDisabled] = useState(false);
   // const [inputError, setInputError] = useState(''); // TODO
 
-  const FETCH_OPTIONS = {
-    method: "GET",
-    headers: {
-      "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com",
-      "X-RapidAPI-Key": "1be0fcd283msh40b6164f5cd1179p152c73jsn2e00608d4e8e",
-    },
-  };
-
-  const getCities = (input) => {
+  // Fetch data and update the state
+  const getData = async (input) => {
+    // 1. If input value is empty, set dropdown content to empty and return without fetching any data
     if (input === "") {
       setDropdownCities(null);
       return;
     }
     const searchPrefix = capitalize(input);
 
+    // 2. Generate URL
     // Params must be part of the URL due to limitations of the fetch API
     // https://github.com/github/fetch/issues/256
     // I don't need to change parameters in this function, so no issues
-    fetch(
-      `https://wft-geo-db.p.rapidapi.com/v1/geo/cities?minPopulation=100000&limit=10&sort=-population&namePrefix=${searchPrefix}`,
-      FETCH_OPTIONS
-    )
-      .then((response) => {
-        const callsRemaining = response.headers.get(
-          "x-ratelimit-requests-remaining"
-        );
-        setApiCallsLeft(callsRemaining); // TODO? if I had a different way of updating this I could extract the entire function into a different file
+    const url = `https://wft-geo-db.p.rapidapi.com/v1/geo/cities?minPopulation=100000&limit=10&sort=-population&namePrefix=${searchPrefix}`;
 
-        return response.json();
-      })
-      .then((response) => {
-        const cities = response.data.filter((city) => {
-          return city.type === "CITY" && city.name.startsWith(searchPrefix);
-        });
+    // 3. Call fetching function
+    const fetchedData = await fetchGeoDBdata(url, searchPrefix); // second parameter is for additional filtering
 
-        setDropdownCities(cities.length > 0 ? cities : null);
-      })
-      .catch((err) => console.error(err));
+    // 4. Update state
+    setDropdownCities(fetchedData.cities);
+    setApiCallsLeft(fetchedData.apiCallsLeft);
   };
 
   // useCallback used to ensure the debounced function references the same function across renders
@@ -65,8 +49,9 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
   // https://dmitripavlutin.com/react-throttle-debounce/
   // also:
   // https://overreacted.io/making-setinterval-declarative-with-react-hooks/
-  const debouncedGetCities = useCallback(debounce(getCities), []);
+  const debouncedGetData = useCallback(debounce(getData), []);
 
+  // Handling the controlled input update and triggering the debounced data fetch (to execute later)
   const handleInputChange = (e) => {
     // 1. prevent default form/input behaviour
     e.preventDefault();
@@ -78,7 +63,7 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
     setCurrentCity(null);
 
     // 4. Fetch cities for dropdown list
-    debouncedGetCities(e.target.value);
+    debouncedGetData(e.target.value);
   };
 
   const handleSubmit = (e) => {
@@ -132,7 +117,7 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
           </div>
           {/* Dropdown */}
           {
-            // only display dropdown when (1) there is no current selection and (2) there is a list of cities to display (fetching returns an array)
+            // only display dropdown when (1) there is no current selection and (2) there is an array of cities to display
             !currentCity && dropdownCities && (
               <CitySearchDropdown
                 dropdownCities={dropdownCities}

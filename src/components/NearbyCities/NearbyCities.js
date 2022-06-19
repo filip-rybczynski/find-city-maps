@@ -2,8 +2,11 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
-// Components
+// components
 import CityInfo from "../CityInfo/CityInfo";
+
+// helper functions
+import fetchGeoDBdata from "../../functions/fetchGeoDBdata";
 
 // styles
 import "./nearby-cities.scss";
@@ -14,41 +17,21 @@ function NearbyCities({
   setApiCallsLeft,
   setMainCity,
   setNearbyCity,
-  className: cssClass
+  className: cssClass,
 }) {
   const [nearbyCitiesArr, setNearbyCitiesArr] = useState(null);
   const [activeButton, setActiveButton] = useState(null);
 
-  const fetchOptions = {
-    method: "GET",
-    headers: {
-      "X-RapidAPI-Host": "wft-geo-db.p.rapidapi.com",
-      "X-RapidAPI-Key": "1be0fcd283msh40b6164f5cd1179p152c73jsn2e00608d4e8e",
-    },
-  };
+  const getNearbyCities = async (id) => {
+    // 1. Generate URL
+    const url = `https://wft-geo-db.p.rapidapi.com/v1/geo/cities/${id}/nearbyCities?limit=10&radius=100&minPopulation=100000&types=CITY&sort=-population`;
 
-  const getNearbyCities = (id) => {
-    fetch(
-      `https://wft-geo-db.p.rapidapi.com/v1/geo/cities/${id}/nearbyCities?limit=10&radius=100&minPopulation=100000&types=CITY&sort=-population`,
-      fetchOptions
-    )
-      .then((response) => {
-        const callsRemaining = response.headers.get(
-          "x-ratelimit-requests-remaining"
-        );
+    // 2. Call fetching function
+    const fetchedData = await fetchGeoDBdata(url);
 
-        setApiCallsLeft(callsRemaining);
-
-        return response.json();
-      })
-      .then((response) => {
-        const nearbyCities = response.data;
-
-        setNearbyCitiesArr(nearbyCities.length > 0 ? nearbyCities : null);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // 3. Update state
+    setNearbyCitiesArr(fetchedData.cities);
+    setApiCallsLeft(fetchedData.apiCallsLeft);
   };
 
   const handleClick = (e, city) => {
@@ -67,7 +50,7 @@ function NearbyCities({
   useEffect(() => {
     setTimeout(() => {
       getNearbyCities(mainCity.id);
-    }, 500);
+    }, 1000);
 
     return function () {
       setNearbyCitiesArr(null);
@@ -78,33 +61,37 @@ function NearbyCities({
     <section className={`${cssClass} nearby-cities`}>
       {/* Found nearby cities */}
       <div className="nearby-cities__buttons">
-        <h3 className="nearby-cities__header">
-          Nearby cities
-        </h3>
-        {nearbyCitiesArr && nearbyCitiesArr.map((city) => (
-          <button
-            key={city.id}
-            onClick={(e) => handleClick(e, city)}
-            className={`nearby-cities__button ${
-              city.id === activeButton ? "active" : ""
-            }`}
-          >
-            {/* Button text content */}
-            {city.name}
-            {city.countryCode !== mainCity.countryCode
-              ? ` (${city.countryCode})`
-              : ""}
-          </button>
-        ))}
+        <h3 className="nearby-cities__header">Nearby cities</h3>
+        {nearbyCitiesArr &&
+          nearbyCitiesArr.map((city) => (
+            <button
+              key={city.id}
+              onClick={(e) => handleClick(e, city)}
+              className={`nearby-cities__button ${
+                city.id === activeButton ? "active" : ""
+              }`}
+            >
+              {/* Button text content */}
+              {city.name}
+              {city.countryCode !== mainCity.countryCode
+                ? ` (${city.countryCode})`
+                : ""}
+            </button>
+          ))}
       </div>
       {/* Information for selected nearby city (can be empty if none selected) */}
-      <div className={`nearby-cities__info details ${!nearbyCity ? "" : "visible"}`}>
+      <div
+        className={`nearby-cities__info details ${
+          !nearbyCity ? "" : "visible"
+        }`}
+      >
         {!nearbyCity ? (
           ""
         ) : (
           <>
             <h3 className="details__header">{nearbyCity.name}</h3>
-                        <button className="details__change-button"
+            <button
+              className="details__change-button"
               onClick={() => {
                 setMainCity(nearbyCity);
                 setNearbyCity(null);
@@ -116,7 +103,6 @@ function NearbyCities({
               city={nearbyCity}
               dontShowCountry={nearbyCity.countryCode === mainCity.countryCode}
             />
-
           </>
         )}
       </div>
