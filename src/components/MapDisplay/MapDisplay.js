@@ -22,6 +22,7 @@ function MapDisplay({ city, nearbyCity }) {
   const [zoom, setStateZoom] = useState(9); // I might want to modify zoom interactively  later on
 
   const [vectorSource, setVectorSource] = useState(null);
+  const [showVectorLayer, setShowVectorLayer] = useState(true);
 
   // To ensure center is updated when displayed city changes ("city" in props)
   useEffect(() => {
@@ -52,7 +53,6 @@ function MapDisplay({ city, nearbyCity }) {
     return () => {
       setVectorSource(null);
     };
-
   }, [city, nearbyCity]);
 
   const resetCenter = () => {
@@ -71,10 +71,15 @@ function MapDisplay({ city, nearbyCity }) {
       >
         <Layers>
           <TileLayer source={new OSM()} zIndex={0} />
-          <VectorLayer source={vectorSource} zIndex={0} />
+          {showVectorLayer && <VectorLayer source={vectorSource} zIndex={0} />}
         </Layers>
       </CityMap>
-      <MapOptions city={city} resetCenter={resetCenter} />
+      <MapOptions
+        city={city}
+        showVectorLayer={showVectorLayer}
+        setShowVectorLayer={setShowVectorLayer}
+        resetCenter={resetCenter}
+      />
     </div>
   );
 }
