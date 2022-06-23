@@ -15,7 +15,7 @@ import fetchGeoDBdata from "../../functions/fetchGeoDBdata";
 import "./city-selection.scss";
 
 function CitySelection({ setMainCity, setApiCallsLeft }) {
-  const [dropdownCities, setDropdownCities] = useState(null); // list (array) of cities that appear in the search input field's dropdown. Empty is null since [] is not a falsey value and that will be useful in the render
+  const [dropdownCities, setDropdownCities] = useState(null); // list (array) of cities that appear in the search input field's dropdown. Value is NULL when input is empty (so there is no search/fetching data). If there is an array, even empty, it means input is populated/search was ran.
   const [searchInputValue, setSearchInputValue] = useState(""); // value of search input (controlled input)
   const [currentCity, setCurrentCity] = useState(null); // current city selected in the input (data already fetched)
   const [isInputDisabled, setIsInputDisabled] = useState(false);
@@ -79,6 +79,8 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
     setDropdownCities(null);
   };
 
+  const generateDropdownComponent = !currentCity && searchInputValue; // Dropdown should show if there is no current selection, but there is something in the search input
+
   return (
     <div className={"city-selection"}>
       <header className="city-selection__header">Select city</header>
@@ -110,7 +112,7 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
           {/* Dropdown */}
           {
             // only display dropdown when (1) there is no current selection and (2) there is an array of cities to display
-            !currentCity && dropdownCities && (
+            generateDropdownComponent && (
               <CitySearchDropdown
                 dropdownCities={dropdownCities}
                 setSearchInputValue={setSearchInputValue}

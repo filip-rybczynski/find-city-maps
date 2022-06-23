@@ -21,4 +21,10 @@
 
     list-style: none;
     overflow: hidden;
+
+    &__no-results {
+        padding: 7px 18px;
+
+        color: darkred;
+    }
 }

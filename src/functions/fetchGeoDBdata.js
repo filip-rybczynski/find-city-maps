@@ -47,9 +47,9 @@ const fetchGeoDBdata = async (url, nameStartsWith = "") => {
 
   const responseObject = await response.json();
 
-  if (responseObject.data.length === 0) {
-    return fetchedData;
-  }
+  // if (responseObject.data.length === 0) {
+  //   return fetchedData;
+  // }
 
   const cities = responseObject.data
     .filter((city) => {
@@ -60,10 +60,10 @@ const fetchGeoDBdata = async (url, nameStartsWith = "") => {
 
   // * Alphabetical sorting by name could also be done via the URL (API gives this option), but since there is a 10 result limit for fetched results in the free plan, I want to use the URL to sort by population (to get the largest cities) and then sort alphabetically in the fetching function.
 
-  if (cities.length !== 0) {
-    // If not empty after filtering, assign the data to the fetchedData object property
+  // if (cities.length !== 0) {
+    // // If not empty after filtering, assign the data to the fetchedData object property
     fetchedData.cities = cities;
-  }
+  // }
 
   // return object with obtained information
   return fetchedData;

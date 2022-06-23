@@ -22,7 +22,11 @@ function CitySearchDropdown({
     }
   };
 
-  return (
+  if (dropdownCities === null) return null; // return empty component if dropdownCities is not populated at all (meaning no search was ran)
+
+  return dropdownCities.length === 0 ? (
+    <span className={"dropdown dropdown__no-results"}>Sorry, no results!</span>
+  ) : (
     <ul className={"dropdown"} onKeyPress={chooseFocusedOption}>
       {dropdownCities &&
         dropdownCities.map((city) => (
