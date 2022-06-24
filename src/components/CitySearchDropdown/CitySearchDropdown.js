@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 
 // components
 import DropdownItem from "../DropdownItem/DropdownItem";
+import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
 
 // styles
 import "./city-search-dropdown.scss";
@@ -22,7 +23,12 @@ function CitySearchDropdown({
     }
   };
 
-  if (dropdownCities === null) return null; // return empty component if dropdownCities is not populated at all (meaning no search was ran)
+  if (dropdownCities === null)
+    return (
+      <span className={"dropdown"}>
+        <LoadingAnimation />
+      </span>
+    ); // return loading component if dropdownCities is not populated at all (meaning no search was ran)
 
   return dropdownCities.length === 0 ? (
     <span className={"dropdown dropdown__no-results"}>Sorry, no results!</span>

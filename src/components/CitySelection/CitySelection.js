@@ -18,7 +18,6 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
   const [dropdownCities, setDropdownCities] = useState(null); // list (array) of cities that appear in the search input field's dropdown. Value is NULL when input is empty (so there is no search/fetching data). If there is an array, even empty, it means input is populated/search was ran.
   const [searchInputValue, setSearchInputValue] = useState(""); // value of search input (controlled input)
   const [currentCity, setCurrentCity] = useState(null); // current city selected in the input (data already fetched)
-  const [isInputDisabled, setIsInputDisabled] = useState(false);
   // const [inputError, setInputError] = useState(''); // TODO
 
   // Fetch data and update the state
@@ -61,6 +60,7 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
 
     // 3. Since we are searching for cities again, clear currentCity. This will show dropdown list again and remove the country tag visible in the input field
     setCurrentCity(null);
+    setDropdownCities(null);
 
     // 4. Fetch cities for dropdown list
     debouncedGetData(e.target.value);
@@ -79,7 +79,7 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
     setDropdownCities(null);
   };
 
-  const generateDropdownComponent = !currentCity && searchInputValue; // Dropdown should show if there is no current selection, but there is something in the search input
+  const generateDropdownComponent = !currentCity && searchInputValue; // Dropdown should appear if there is no city selected yet (in input), but the user is typing (searchInputValue is not empty)
 
   return (
     <div className={"city-selection"}>
@@ -98,7 +98,6 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
               name="city-search"
               value={searchInputValue}
               onChange={handleInputChange}
-              disabled={isInputDisabled}
             />
             {
               // country tag to clarify which country the city's from
@@ -110,16 +109,13 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
             }
           </div>
           {/* Dropdown */}
-          {
-            // only display dropdown when (1) there is no current selection and (2) there is an array of cities to display
-            generateDropdownComponent && (
-              <CitySearchDropdown
-                dropdownCities={dropdownCities}
-                setSearchInputValue={setSearchInputValue}
-                setCurrentCity={setCurrentCity}
-              />
-            )
-          }
+          {generateDropdownComponent && (
+            <CitySearchDropdown
+              dropdownCities={dropdownCities}
+              setSearchInputValue={setSearchInputValue}
+              setCurrentCity={setCurrentCity}
+            />
+          )}
           {/* Display button */}
           <button className={"city-search__button"} onClick={handleSubmit}>
             Display
