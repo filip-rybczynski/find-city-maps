@@ -23,8 +23,8 @@ function CityDisplay({ mainCity, setApiCallsLeft, setMainCity }) {
       <h2>{mainCity.name}</h2>
       <div className="city-display__information">
         <section className="city-display__general-info">
-          <h3 className="city-display__info-header">General info</h3>
-          <CityInfo city={mainCity} />
+          {/* <h3 className="city-display__info-header">General info</h3> */}
+          <CityInfo city={mainCity} headerText={"General info"}/>
         </section>
 
           <NearbyCities

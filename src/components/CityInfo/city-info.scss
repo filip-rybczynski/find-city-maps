@@ -5,12 +5,23 @@
 
   background: lightgray;
 
+  &__header {
+    margin: 1rem 0.5rem;
+  }
+
 
   & table {
+
+    overflow: hidden; // for "slide in and expand" animating purposes
+
     width: 100%;
     border-collapse: collapse;
     & td {
       padding-left: 12px;
+
+      // for "slide in and expand" animating purposes
+      overflow: hidden;
+      white-space: nowrap;
     }
 
     & td:first-of-type {

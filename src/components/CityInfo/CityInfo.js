@@ -9,11 +9,14 @@ import coordinatesToString from "../../functions/coordinatesToString";
 import "./city-info.scss";
 
 function CityInfo({
-  city: { country, region, population, longitude, latitude, distance = null },
-  dontShowCountry = false,
+  city: { name, country, region, population, longitude, latitude, distance = null },
+  headerText, dontShowCountry = false,
 }) {
   return (
     <div className="city-info">
+      <h3 className="city-info__header">
+        {headerText || name}
+      </h3>
       <table className="city-info__table">
         <tbody>
           {!dontShowCountry && (
@@ -48,6 +51,7 @@ function CityInfo({
 
 CityInfo.propTypes = {
   city: PropTypes.shape({
+    name: PropTypes.string.isRequired,
     country: PropTypes.string.isRequired,
     region: PropTypes.string.isRequired,
     population: PropTypes.number.isRequired,
@@ -56,6 +60,7 @@ CityInfo.propTypes = {
     distance: PropTypes.number,
   }),
   dontShowCountry: PropTypes.bool,
+  headerText: PropTypes.string,
 };
 
 export default CityInfo;

@@ -1,6 +1,6 @@
 .city-display {
     width: 80%;
-    min-width: 760px;
+    min-width: 768px;
 
     margin-top: 1rem;
     padding: 1rem;
@@ -10,16 +10,15 @@
         background: rgb(247, 247, 247);
 
         &__information {
-            // min-height: 250px;
+            min-height: 240px;
 
             display: flex;
 
-            justify-content: space-between;
-
+            justify-content: flex-start;
         }
         
         &__general-info {
-            width: 40%;
+            min-width: 40%;
 
             border-radius: 0.8rem;
 
@@ -31,9 +30,5 @@
 
         &__info-header {
             margin: 1rem 0.5rem;
-        }
-
-        &__nearby-cities {
-            width: 60%;
         }
 }
