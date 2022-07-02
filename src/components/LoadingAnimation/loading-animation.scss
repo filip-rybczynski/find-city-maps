@@ -16,8 +16,6 @@
 
   width: 100%;
 
-  font-size: 1rem;
-
   &__spinner {
     content: "";
     display: inline-block;
@@ -32,6 +30,25 @@
   }
 
   &__text {
+    font-size: 1rem;
+
     margin: 0px -10px;
+  }
+}
+
+.vertical {
+  justify-content: center;
+
+  & > .loading__spinner {
+    border-width: 8px;
+
+    height: 70px;
+    width: 70px;
+  }
+
+  & > .loading__text {
+    font-size: 1.2rem;
+
+    margin: 0;
   }
 }

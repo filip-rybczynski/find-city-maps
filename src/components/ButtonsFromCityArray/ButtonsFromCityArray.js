@@ -29,7 +29,7 @@ function ButtonsFromCityArray({
     <div className={`nearby-cities__buttons ${cssClass}`}>
       <h3 className="nearby-cities__header">{headerText}</h3>
       {!cityArray ? (
-        <LoadingAnimation />
+        <LoadingAnimation isVertical/>
       ) : (
         cityArray.map((city) => (
           <button
