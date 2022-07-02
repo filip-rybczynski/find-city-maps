@@ -6,6 +6,7 @@ import VectorLayer from "../Layers/VectorLayer";
 import MapOptions from "../MapOptions/MapOptions";
 
 import { fromLonLat } from "ol/proj.js";
+import { boundingExtent } from "ol/extent.js";
 import OSM from "ol/source/OSM.js";
 import Vector from "ol/source/Vector.js";
 
@@ -24,6 +25,8 @@ function MapDisplay({ city, nearbyCity }) {
   const [vectorSource, setVectorSource] = useState(null);
   const [showVectorLayer, setShowVectorLayer] = useState(true);
 
+  const [extent, setExtent] = useState(null);
+
   // To ensure center is updated when displayed city changes ("city" in props)
   useEffect(() => {
     let longitude = city.longitude;
@@ -37,6 +40,23 @@ function MapDisplay({ city, nearbyCity }) {
     setStateCenter(fromLonLat([longitude, latitude]));
     setStateZoom(9);
   }, [city, nearbyCity]);
+
+    // To fit both cities
+    useEffect(() => {
+
+      if (!city || !nearbyCity) return;
+
+     const mainCityCoords = fromLonLat([city.longitude, city.latitude]);
+     const nearbyCityCoords = fromLonLat([nearbyCity.longitude, nearbyCity.latitude]);
+
+     const ext = boundingExtent([mainCityCoords, nearbyCityCoords])
+  
+    setExtent(ext);
+
+      return () => {
+        setExtent(null);
+      }
+    }, [city, nearbyCity]);
 
   // creating markers
 
@@ -66,6 +86,7 @@ function MapDisplay({ city, nearbyCity }) {
       <CityMap
         center={center}
         zoom={zoom}
+        extent={extent}
         setStateZoom={setStateZoom}
         setStateCenter={setStateCenter}
       >

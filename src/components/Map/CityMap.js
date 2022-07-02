@@ -11,7 +11,7 @@ import 'ol/ol.css';
 
 // import OLTileLayer from "ol/layer/Tile"; // a way to access directly. Otherwise, it's ol.layer.Tile
 
-const CityMap = ({ children, center, zoom, setStateZoom, setStateCenter}) => {
+const CityMap = ({ children, center, zoom, setStateZoom, setStateCenter, extent}) => {
 
   const mapRef = useRef();
 
@@ -85,6 +85,18 @@ const CityMap = ({ children, center, zoom, setStateZoom, setStateCenter}) => {
 
     map.getView().setCenter(center);
   }, [center]);
+
+    // fitting two cities
+    useEffect(() => {
+      if (!extent) return; // no action if there is no current extent
+  
+    const  sizePadding = {
+        size: map.getSize(),
+        padding: [50, 50, 50, 50]
+      }
+
+      map.getView().fit(extent, sizePadding);
+    }, [extent]);
 
   return (
     <MapContext.Provider value={ map }> 
