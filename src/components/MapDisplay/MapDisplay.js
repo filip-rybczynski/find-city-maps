@@ -5,6 +5,7 @@ import TileLayer from "../Layers/TileLayer";
 import VectorLayer from "../Layers/VectorLayer";
 import MapOptions from "../MapOptions/MapOptions";
 
+import {View} from "ol";
 import { fromLonLat } from "ol/proj.js";
 import { boundingExtent } from "ol/extent.js";
 import OSM from "ol/source/OSM.js";
@@ -15,48 +16,50 @@ import createMarker from "../../functions/createMarker";
 // Done based on: https://medium.com/swlh/how-to-incorporate-openlayers-maps-into-react-65b411985744
 
 function MapDisplay({ city, nearbyCity }) {
+  const DEFAULT_ZOOM = 9;
+
   // the default projection for OpenLayers is the Spherical Mercator projection, for which we need to perform a conversion from longitude and latitude values received from props
   const mainMercatorCoords = fromLonLat([city.longitude, city.latitude]);
 
   const [center, setStateCenter] = useState(mainMercatorCoords);
+  const [zoom, setStateZoom] = useState(DEFAULT_ZOOM); // I might want to modify zoom interactively  later on
+  const [extent, setExtent] = useState(null); // to use when two cities are displayed
 
-  const [zoom, setStateZoom] = useState(9); // I might want to modify zoom interactively  later on
+  const resetCenter = () => {
+    setStateZoom(DEFAULT_ZOOM);
+    setStateCenter(mainMercatorCoords);
+    setExtent(null);
+  };
 
   const [vectorSource, setVectorSource] = useState(null);
   const [showVectorLayer, setShowVectorLayer] = useState(true);
 
-  const [extent, setExtent] = useState(null);
+  // To ensure center is updated when displayed main city changes ("city" in props)
+  // OR if nearbyCity changes to null (meaning that only the main city is displayed)
 
-  // To ensure center is updated when displayed city changes ("city" in props)
   useEffect(() => {
-    let longitude = city.longitude;
-    let latitude = city.latitude;
+    if (nearbyCity !== null) return;
 
-    if (nearbyCity) {
-      longitude = (longitude + nearbyCity.longitude) / 2;
-      latitude = (latitude + nearbyCity.latitude) / 2;
-    }
-
-    setStateCenter(fromLonLat([longitude, latitude]));
-    setStateZoom(9);
+    resetCenter();
   }, [city, nearbyCity]);
 
-    // To fit both cities
-    useEffect(() => {
+  // In remaining scenarios (nearbyCity change to different value than null), instead of new center calculation, extent will be created to fit both cities
+  useEffect(() => {
+    if (nearbyCity === null) return;
 
-      if (!city || !nearbyCity) return;
+    const nearbyCityMercatorCoords = fromLonLat([
+      nearbyCity.longitude,
+      nearbyCity.latitude,
+    ]);
 
-     const mainCityCoords = fromLonLat([city.longitude, city.latitude]);
-     const nearbyCityCoords = fromLonLat([nearbyCity.longitude, nearbyCity.latitude]);
+    const ext = boundingExtent([mainMercatorCoords, nearbyCityMercatorCoords]);
 
-     const ext = boundingExtent([mainCityCoords, nearbyCityCoords])
-  
     setExtent(ext);
 
-      return () => {
-        setExtent(null);
-      }
-    }, [city, nearbyCity]);
+    return () => {
+      setExtent(null);
+    };
+  }, [nearbyCity]);
 
   // creating markers
 
@@ -74,11 +77,6 @@ function MapDisplay({ city, nearbyCity }) {
       setVectorSource(null);
     };
   }, [city, nearbyCity]);
-
-  const resetCenter = () => {
-    setStateZoom(9);
-    setStateCenter(mainMercatorCoords);
-  };
 
   return (
     <div>
