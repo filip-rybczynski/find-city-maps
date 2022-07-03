@@ -25,8 +25,8 @@ function MapDisplay({ city, nearbyCity }) {
   const [zoom, setStateZoom] = useState(DEFAULT_ZOOM); // I might want to modify zoom interactively  later on
   const [extent, setExtent] = useState(null); // to use when two cities are displayed
 
-  const resetCenter = () => {
-    setStateZoom(DEFAULT_ZOOM);
+  const resetCenter = (zoom = DEFAULT_ZOOM) => {
+    setStateZoom(zoom);
     setStateCenter(mainMercatorCoords);
     setExtent(null);
   };
@@ -95,6 +95,7 @@ function MapDisplay({ city, nearbyCity }) {
       </CityMap>
       <MapOptions
         city={city}
+        zoom={zoom}
         showVectorLayer={showVectorLayer}
         setShowVectorLayer={setShowVectorLayer}
         resetCenter={resetCenter}

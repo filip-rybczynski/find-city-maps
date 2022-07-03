@@ -1,16 +1,43 @@
-import React from 'react';
-import './map-options.scss';
+import React from "react";
+import "./map-options.scss";
 
-function MapOptions ({city, resetCenter, showVectorLayer, setShowVectorLayer}) {
-return (
+function MapOptions({
+  city,
+  zoom,
+  resetCenter,
+  showVectorLayer,
+  setShowVectorLayer,
+}) {
+  return (
     <div>
-        <button onClick={resetCenter}>Back to {city.name}</button>
-        <label>
-        <input type="checkbox" checked={showVectorLayer} onChange={e => setShowVectorLayer(e.target.checked)} />
+      <fieldset>
+        <legend>Center map back on {city.name}</legend>
+
+        <button
+          onClick={() => {
+            resetCenter(zoom);
+          }}
+        >
+          Preserve zoom
+        </button>
+        <button
+          onClick={() => {
+            resetCenter();
+          }}
+        >
+          Reset zoom
+        </button>
+      </fieldset>
+      <label>
+        <input
+          type="checkbox"
+          checked={showVectorLayer}
+          onChange={(e) => setShowVectorLayer(e.target.checked)}
+        />
         Show markers
-        </label>
+      </label>
     </div>
-)
+  );
 }
 
-export default MapOptions;  
+export default MapOptions;
