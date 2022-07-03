@@ -20,7 +20,7 @@ function CityDisplay({
 
   // Whenever the main city displayed changes, we should clear any selected nearby city
   useEffect(() => {
-    setNearbyCity(null); // TODO: add 'if (nearbyCity !== null)' to nullify the nearby city value if main city is changed via City Selection
+    if (nearbyCity !== null) setNearbyCity(null); 
   }, [mainCity]);
 
   return (

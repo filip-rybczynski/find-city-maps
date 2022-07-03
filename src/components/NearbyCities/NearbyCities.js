@@ -66,7 +66,6 @@ function NearbyCities({
       <ButtonsFromCityArray
         cityArray={nearbyCitiesArr}
         mainCity={mainCity}
-        handleFunction={handleClick}
         setNearbyCity={setNearbyCity}
         headerText={"Nearby cities"}
         className={"nearby-cities__buttons"}
@@ -90,8 +89,8 @@ function NearbyCities({
           <button
             className="details__change-button"
             onClick={() => {
+              setNearbyCity(null); // reset nearby city
               setMainCity(nearbyCity);
-              setNearbyCity(null);
             }}
           >
             Set as main city
