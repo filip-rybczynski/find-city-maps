@@ -1,34 +1,50 @@
 .city-display {
-    width: 80%;
-    min-width: 768px;
+  width: 80%;
+  min-width: 768px;
 
-    margin-top: 1rem;
-    padding: 1rem;
+  margin-top: 1rem;
+  padding: 1rem;
 
-    border-radius: 1rem;
-    
-        background: rgb(247, 247, 247);
+  border-radius: 1rem;
 
-        &__information {
-            min-height: 240px;
+  background: rgb(247, 247, 247);
 
-            display: flex;
+  &__information {
+    min-height: 240px;
 
-            justify-content: flex-start;
-        }
-        
-        &__general-info {
-            min-width: 40%;
+    display: flex;
 
-            border-radius: 0.8rem;
+    justify-content: flex-start;
+  }
 
-            background: lightgray;
+  &__general-info {
+    min-width: 40%;
+
+    border-radius: 0.8rem;
+
+    background: lightgray;
 
     overflow: hidden;
+  }
 
-        }
+  &__info-header {
+    margin: 1rem 0.5rem;
+  }
+}
 
-        &__info-header {
-            margin: 1rem 0.5rem;
-        }
+.main-info {
+    position: relative;
+
+    &__back-button {
+        position: absolute;
+        bottom: 1.2rem;
+        right: 1.2rem;
+    
+        margin-left: 1.2rem;
+        padding: 0.2rem 0.35rem 0.15rem;
+        border-radius: 0.8rem;
+    
+        font-size: 0.9rem;
+        font-weight: bold;
+      }
 }
