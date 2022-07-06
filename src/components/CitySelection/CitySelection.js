@@ -19,6 +19,8 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
   const [searchInputValue, setSearchInputValue] = useState(""); // value of search input (controlled input)
   const [currentCity, setCurrentCity] = useState(null); // current city selected in the input (data already fetched)
   const [inputError, setInputError] = useState(null);
+  const [hideDropdown, setHideDropdown] = useState(false); // Used to temporarily hide dropdown when user clicks outside of its bounds (or outside of the input).
+  // Handling primarily in the CitySearchDropdown component
 
   // Fetch data and update the state
   const getData = async (input) => {
@@ -83,6 +85,10 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
     setDropdownCities(null);
   };
 
+  const showDropdownIfHidden = (e) => {
+    if (hideDropdown) setHideDropdown(!hideDropdown);
+  }
+
   const generateDropdownComponent = !currentCity && searchInputValue; // Dropdown should appear if there is no city selected yet (in input), but the user is typing (searchInputValue is not empty)
 
   return (
@@ -102,6 +108,7 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
               name="city-search"
               value={searchInputValue}
               onChange={handleInputChange}
+              onClick={showDropdownIfHidden}
             />
             {
               // country tag to clarify which country the city's from
@@ -119,6 +126,8 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
               setSearchInputValue={setSearchInputValue}
               setCurrentCity={setCurrentCity}
               inputError={inputError}
+              isHidden={hideDropdown}
+              setIfHidden={setHideDropdown}
             />
           )}
           {/* Display button */}
