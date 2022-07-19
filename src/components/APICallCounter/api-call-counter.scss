@@ -1,3 +1,11 @@
 .api-counter {
-    width: 40%;
+  max-height: 100%;
+
+  text-align: center;
+}
+
+// Class for when there are less than 100 API calls remaining for the day
+.low {
+  font-weight: bold;
+  color: goldenrod;
 }

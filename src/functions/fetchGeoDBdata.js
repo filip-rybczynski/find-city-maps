@@ -41,7 +41,7 @@ const fetchGeoDBdata = async (url, nameStartsWith = "") => {
     }
   }
 
-  fetchedData.apiCallsLeft = response.headers.get(
+  fetchedData.apiCallsLeft = +response.headers.get(
     "x-ratelimit-requests-remaining"
   );
 

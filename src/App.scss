@@ -15,4 +15,24 @@
   &__header {
     font-size: 2rem;
   }
+
+  &__counter {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    max-width: 15%;
+
+    padding: 0.5rem 1rem;
+
+    display: flex;
+    justify-content: center;
+
+    border-bottom-left-radius: 1rem;
+
+    background: darkslategrey;
+    color: white;
+
+    font-size: 0.8rem;
+  }
 }
