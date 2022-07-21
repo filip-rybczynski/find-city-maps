@@ -5,6 +5,9 @@ import TileLayer from "../Layers/TileLayer";
 import VectorLayer from "../Layers/VectorLayer";
 import MapOptions from "../MapOptions/MapOptions";
 
+// values
+import { DEFAULT_ZOOM } from "../../constants";
+
 import {View} from "ol";
 import { fromLonLat } from "ol/proj.js";
 import { boundingExtent } from "ol/extent.js";
@@ -16,7 +19,6 @@ import createMarker from "../../functions/createMarker";
 // Done based on: https://medium.com/swlh/how-to-incorporate-openlayers-maps-into-react-65b411985744
 
 function MapDisplay({ city, nearbyCity }) {
-  const DEFAULT_ZOOM = 9;
 
   // the default projection for OpenLayers is the Spherical Mercator projection, for which we need to perform a conversion from longitude and latitude values received from props
   const mainMercatorCoords = fromLonLat([city.longitude, city.latitude]);

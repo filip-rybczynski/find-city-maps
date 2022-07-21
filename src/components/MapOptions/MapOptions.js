@@ -1,9 +1,12 @@
 // React
-import React, {useState, useEffect} from "react";
+import React from "react";
 import PropTypes from "prop-types";
 
 // styles
 import "./map-options.scss";
+
+// values
+import { DEFAULT_ZOOM } from "../../constants";
 
 // 3rd party
 import { fromLonLat } from "ol/proj.js";
@@ -11,12 +14,12 @@ import { fromLonLat } from "ol/proj.js";
 function MapOptions({
   city,
   zoom,
-  // center,
+  center,
   resetCenter,
   showVectorLayer,
   setShowVectorLayer,
 }) {
-  // const originalCenter = fromLonLat([city.longitude, city.latitude]);
+  const originalCenter = fromLonLat([city.longitude, city.latitude]);
 
   return (
     <div className="map-options">
@@ -24,9 +27,9 @@ function MapOptions({
         <legend>Center map back on {city.name}</legend>
 
         <button
-        // disabled={
-        //   center.every((coord, i ) => coord === originalCenter[i] ) // check if center is the same as the original center (coordinates of the city being displayed)
-        // }
+        disabled={
+          center.every((coord, i ) => coord === originalCenter[i] ) // check if center is the same as the original center (coordinates of the city being displayed)
+        }
           onClick={() => {
             resetCenter(zoom);
           }}
@@ -34,7 +37,7 @@ function MapOptions({
           Preserve current zoom
         </button>
         <button
-        // disabled={zoom === 9} // TODO: import DEFAULT_ZOOM
+        disabled={zoom === DEFAULT_ZOOM}
           onClick={() => {
             resetCenter();
           }}
