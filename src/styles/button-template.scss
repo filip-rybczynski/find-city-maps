@@ -1,0 +1,26 @@
+@function multiply($multiplier, $values...) {
+    $newValues: null;
+
+    @for $i from 1 through length($values) {
+        $newValues: append($newValues, $multiplier * nth($values, $i))
+    }
+
+    @return $newValues;
+}
+
+@mixin button($scale, $font-weight: normal) {
+
+    $border-width: 1px;
+    
+    @if $font-weight == bold {
+        $border-width: 2px;
+    } 
+
+    border: solid $border-width;
+
+    padding: multiply($scale, 0.25rem, 0.45rem);
+    border-radius: multiply($scale, 0.6rem);
+
+    font-size: multiply($scale, 1rem);
+    font-weight: $font-weight;
+}

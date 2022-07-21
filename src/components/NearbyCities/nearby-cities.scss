@@ -1,3 +1,5 @@
+@import "./../../styles/button-template.scss";
+
 .nearby-cities {
   display: flex;
   justify-content: space-between;
@@ -37,16 +39,9 @@
   &__button {
     flex: 1 0 auto;
 
-    padding: 1px 8px;
-
     max-width: 100%;
 
-    border: solid 1px;
-
-    padding: 0.2rem 0.35rem 0.15rem;
-    border-radius: 0.5rem;
-
-    font-size: 0.8rem;
+    @include button(0.8);
 
     &.active {
       background: darkgray;

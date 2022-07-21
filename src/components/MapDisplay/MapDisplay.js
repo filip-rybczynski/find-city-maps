@@ -96,6 +96,7 @@ function MapDisplay({ city, nearbyCity }) {
       <MapOptions
         city={city}
         zoom={zoom}
+        center={center}
         showVectorLayer={showVectorLayer}
         setShowVectorLayer={setShowVectorLayer}
         resetCenter={resetCenter}

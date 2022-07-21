@@ -1,3 +1,5 @@
+@import "./../../styles/button-template.scss";
+
 .city-selection {
   width: 70%;
   min-width: 560px;
@@ -68,13 +70,9 @@
   }
 
   &__button {
-    padding: 0.3rem 0.5rem 0.2rem;
+    @include button(1.1, bold);
 
     width: 100px;
     height: 2.2rem;
-    border-radius: 0.8rem;
-
-    font-size: 1.1rem;
-    font-weight: bold;
   }
 }
