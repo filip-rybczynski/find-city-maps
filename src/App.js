@@ -9,6 +9,7 @@ import Footer from "./components/Footer/Footer";
 // styles
 import "./App.scss";
 import APICallCounter from "./components/APICallCounter/APICallCounter";
+import ErrorBoundary from "./components/ErrorBoundary/ErrorBoundary";
 
 function App() {
   const [apiCallsLeft, setApiCallsLeft] = useState(1000); // daily limit on API calls to city DB
@@ -29,17 +30,22 @@ function App() {
           <APICallCounter callsRemaining={apiCallsLeft} />
         </aside>
       )}
-      <CitySelection
-        setMainCity={changeMainCity}
-        setApiCallsLeft={setApiCallsLeft}
-      />
-      {mainCity && (
-        <CityDisplay
-          mainCity={mainCity}
-          prevMainCity={prevMainCity}
-          setApiCallsLeft={setApiCallsLeft}
+      <ErrorBoundary>
+        <CitySelection
           setMainCity={changeMainCity}
+          setApiCallsLeft={setApiCallsLeft}
         />
+      </ErrorBoundary>
+
+      {mainCity && (
+        <ErrorBoundary>
+          <CityDisplay
+            mainCity={mainCity}
+            prevMainCity={prevMainCity}
+            setApiCallsLeft={setApiCallsLeft}
+            setMainCity={changeMainCity}
+          />
+        </ErrorBoundary>
       )}
 
       <Footer apiCallsLeft={apiCallsLeft} />
