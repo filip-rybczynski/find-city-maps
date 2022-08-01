@@ -9,6 +9,8 @@ const FETCH_OPTIONS = {
   },
 };
 
+let retries = 0; // to track number of attempts in case of too many requests per sec (429 errors) - to retry 2 times before returning error message
+
 // Easy way to throttle fetching (limit is 1/sec). API doesn't provide a Retry-After header, so that option is not available. Sleep is sufficient for this simple functionality, as there will be at most 2 fetch requests lined up one after the other.
 // https://www.useanvil.com/blog/engineering/throttling-and-consuming-apis-with-429-rate-limits/
 function sleep(ms) {
@@ -16,40 +18,57 @@ function sleep(ms) {
 }
 
 const fetchGeoDBdata = async (url, nameStartsWith = "") => {
+  console.log(retries);
+
   // 1. Initialize the fetchedData object
   const fetchedData = {
     apiCallsLeft: 1000,
     cities: null,
+    errorMessage: null,
   };
 
   // 2. Fetch required data from the API
 
-  const response = await fetch(url, FETCH_OPTIONS).catch((error) =>
-    console.error(error)
-  );
+  const response = await fetch(url, FETCH_OPTIONS);
 
-  // Handling bad responses with 400+ and 500+ status (fetch doesn't automatically reject these statuses)
+  // Handling bad responses (fetch doesn't automatically reject these statuses)
   if (!response.ok) {
-    if (response.status === 429) {
-      // Handling the "too many requests" error
-      await sleep(1000); // request limit window for this API (on the free plan) is 1/s according to documentation
-      console.log('Too many requests: trying again');
-      return fetchGeoDBdata(url, nameStartsWith);
-    } else {
-      const message = `An error has occured: ${response.status}`;
-      throw new Error(message); // TODO: handle this error message
+    const { status, statusText } = response;
+
+    // Handling the "too many requests" error specifically
+    if (status === 429) {
+      retries += 1;
+      if (retries < 3) {
+        // there will be two attempts
+        await sleep(1000); // request limit window for this API (on the free plan) is 1/s according to documentation
+
+        return fetchGeoDBdata(url, nameStartsWith);
+      } else {
+        retries = 0;
+      }
     }
+
+    // Creating error message to return
+    fetchedData.errorMessage =
+      "Oops, " +
+      status.toString() +
+      " error" +
+      (statusText && `: ${statusText}`) +
+      "!";
+
+    // if there is an error, finish function execution (there will be no cities data to process)
+    return fetchedData;
   }
 
+  // Reset retries if all goes well
+  retries = 0;
+
+  // Update number of API calls left
   fetchedData.apiCallsLeft = +response.headers.get(
     "x-ratelimit-requests-remaining"
   );
 
   const responseObject = await response.json();
-
-  // if (responseObject.data.length === 0) {
-  //   return fetchedData;
-  // }
 
   const cities = responseObject.data
     .filter((city) => {
@@ -60,10 +79,7 @@ const fetchGeoDBdata = async (url, nameStartsWith = "") => {
 
   // * Alphabetical sorting by name could also be done via the URL (API gives this option), but since there is a 10 result limit for fetched results in the free plan, I want to use the URL to sort by population (to get the largest cities) and then sort alphabetically in the fetching function.
 
-  // if (cities.length !== 0) {
-    // // If not empty after filtering, assign the data to the fetchedData object property
-    fetchedData.cities = cities;
-  // }
+  fetchedData.cities = cities;
 
   // return object with obtained information
   return fetchedData;

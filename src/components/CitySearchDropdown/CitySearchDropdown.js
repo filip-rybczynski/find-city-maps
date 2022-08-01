@@ -13,6 +13,7 @@ function CitySearchDropdown({
   dropdownCities,
   setCurrentCity,
   setSearchInputValue,
+  inputError,
 }) {
   const chooseFocusedOption = (e) => {
     let keycode = e.keyCode ? e.keyCode : e.which;
@@ -24,7 +25,9 @@ function CitySearchDropdown({
   };
 
   if (dropdownCities === null)
-    return (
+    return inputError ? (
+      <span className={"dropdown dropdown__error"}>{inputError}</span>
+    ) : (
       <span className={"dropdown"}>
         <LoadingAnimation />
       </span>
@@ -51,6 +54,7 @@ CitySearchDropdown.propTypes = {
   dropdownCities: PropTypes.array,
   setSearchInputValue: PropTypes.func,
   setCurrentCity: PropTypes.func,
+  inputError: PropTypes.string,
 };
 
 export default CitySearchDropdown;

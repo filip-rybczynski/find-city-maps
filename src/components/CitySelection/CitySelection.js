@@ -18,7 +18,7 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
   const [dropdownCities, setDropdownCities] = useState(null); // list (array) of cities that appear in the search input field's dropdown. Value is NULL when input is empty (so there is no search/fetching data). If there is an array, even empty, it means input is populated/search was ran.
   const [searchInputValue, setSearchInputValue] = useState(""); // value of search input (controlled input)
   const [currentCity, setCurrentCity] = useState(null); // current city selected in the input (data already fetched)
-  // const [inputError, setInputError] = useState(''); // TODO
+  const [inputError, setInputError] = useState(null);
 
   // Fetch data and update the state
   const getData = async (input) => {
@@ -39,8 +39,10 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
     const fetchedData = await fetchGeoDBdata(url, searchPrefix); // second parameter is for additional filtering
 
     // 4. Update state
-    setDropdownCities(fetchedData.cities);
+
     setApiCallsLeft(fetchedData.apiCallsLeft);
+    setInputError(fetchedData.errorMessage); // always assign even if null, to reset back to null if there was an error message before
+    setDropdownCities(fetchedData.cities); // If there is an error, cities === null;
   };
 
   // useCallback used to ensure the debounced function references the same function across renders
@@ -60,7 +62,9 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
 
     // 3. Since we are searching for cities again, clear currentCity. This will show dropdown list again and remove the country tag visible in the input field
     setCurrentCity(null);
+    // Also clear dropdown cities and any error messages
     setDropdownCities(null);
+    setInputError(null);
 
     // 4. Fetch cities for dropdown list
     debouncedGetData(e.target.value);
@@ -114,6 +118,7 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
               dropdownCities={dropdownCities}
               setSearchInputValue={setSearchInputValue}
               setCurrentCity={setCurrentCity}
+              inputError={inputError}
             />
           )}
           {/* Display button */}

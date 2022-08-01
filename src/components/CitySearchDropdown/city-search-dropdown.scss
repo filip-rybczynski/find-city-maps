@@ -1,3 +1,9 @@
+@mixin alternateContent($color) {
+    padding: 6px 18px 8px;
+
+    color: $color;
+}
+
 .dropdown {
     // position: absolute;
     
@@ -23,8 +29,12 @@
     overflow: hidden;
 
     &__no-results {
-        padding: 6px 18px 8px;
+        @include alternateContent(darkred);
+    }
 
-        color: darkred;
+    &__error {
+        @include alternateContent(red);
+
+        font-weight: bold;
     }
 }
