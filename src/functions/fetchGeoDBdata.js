@@ -18,7 +18,6 @@ function sleep(ms) {
 }
 
 const fetchGeoDBdata = async (url, nameStartsWith = "") => {
-  console.log(retries);
 
   // 1. Initialize the fetchedData object
   const fetchedData = {
