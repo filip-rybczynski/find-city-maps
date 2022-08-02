@@ -1,18 +1,22 @@
-import React, { useState } from "react";
+// React
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 
+// Components
 import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
-import { useEffect } from "react";
+
+// styles
+import "./buttons-from-city-array.scss";
 
 function ButtonsFromCityArray({
   cityArray,
   mainCity,
-  headerText,
-  className: cssClass,
   setNearbyCity,
+  inputError,
 }) {
   const [activeButton, setActiveButton] = useState(null);
 
+  // Reset active button after main city change
   useEffect(() => {
     setActiveButton(null);
   }, [mainCity]);
@@ -20,6 +24,7 @@ function ButtonsFromCityArray({
   const handleClick = (e, city) => {
     e.preventDefault();
 
+    // toggle active button display
     if (activeButton !== city.id) {
       setActiveButton(city.id);
       setNearbyCity(city);
@@ -29,34 +34,42 @@ function ButtonsFromCityArray({
     }
   };
 
-  return (
-    <div className={`nearby-cities__buttons ${cssClass}`}>
-      <h3 className="nearby-cities__header">{headerText}</h3>
-      {!cityArray ? (
-        <LoadingAnimation isVertical />
-      ) : (
-        cityArray.map((city) => (
-          <button
-            key={city.id}
-            onClick={(e) => handleClick(e, city)}
-            className={`nearby-cities__button ${
-              city.id === activeButton ? "active" : ""
-            }`}
-          >
-            {/* Button text content */}
-            {city.name}
-            {city.countryCode !== mainCity.countryCode
-              ? ` (${city.countryCode})`
-              : ""}
-          </button>
-        ))
-      )}
-    </div>
-  );
+  if (inputError) {
+    // 1. Check if there's an error
+    // if yes, display error
+    return <strong className="error">{inputError}</strong>;
+  } else if (!cityArray) {
+    // 2. Check if there's an array of cities fetched
+    // if not (cityArray === null), display loading animation
+    return <LoadingAnimation isVertical />;
+  } else if (cityArray.length === 0) {
+    // 3. Check if array is empty
+    // if yes, display message
+    return <span className="no-nearby-cities">No cities found nearby!</span>;
+  }
+
+  // 4. If none of the above are met, generate and display a list of buttons
+  return cityArray.map((city) => (
+    <button
+      key={city.id}
+      onClick={(e) => handleClick(e, city)}
+      className={`nearby-cities__button ${
+        city.id === activeButton && "active"
+      }`}
+    >
+      {/* Button text content */}
+      {city.name}
+      {city.countryCode !== mainCity.countryCode && // additional data point if button refers to city in different country than the main displayed city
+        " " + city.countryCode}
+    </button>
+  ));
 }
 
 ButtonsFromCityArray.propTypes = {
-  array: PropTypes.array,
+  CityArray: PropTypes.array,
+  mainCity: PropTypes.object,
+  setNearbyCity: PropTypes.func,
+  inputError: PropTypes.string,
 };
 
 export default ButtonsFromCityArray;

@@ -5,13 +5,13 @@ import { TransitionGroup, CSSTransition } from "react-transition-group";
 
 // components
 import CityInfo from "../CityInfo/CityInfo";
+import ButtonsFromCityArray from "../ButtonsFromCityArray/ButtonsFromCityArray";
 
 // helper functions
 import fetchGeoDBdata from "../../functions/fetchGeoDBdata";
 
 // styles
 import "./nearby-cities.scss";
-import ButtonsFromCityArray from "../ButtonsFromCityArray/ButtonsFromCityArray";
 
 function NearbyCities({
   nearbyCity,
@@ -22,7 +22,7 @@ function NearbyCities({
   className: cssClass,
 }) {
   const [nearbyCitiesArr, setNearbyCitiesArr] = useState(null);
-  const [activeButton, setActiveButton] = useState(null);
+  const [inputError, setInputError] = useState(null);
 
   const getNearbyCities = async (id) => {
     // 1. Generate URL
@@ -32,24 +32,14 @@ function NearbyCities({
     const fetchedData = await fetchGeoDBdata(url);
 
     // 3. Update state
-    setNearbyCitiesArr(fetchedData.cities);
     setApiCallsLeft(fetchedData.apiCallsLeft);
-  };
-
-  const handleClick = (e, city) => {
-    e.preventDefault();
-
-    if (activeButton !== city.id) {
-      setActiveButton(city.id);
-      setNearbyCity(city);
-    } else {
-      setActiveButton(null);
-      setNearbyCity(null);
-    }
+    setInputError(fetchedData.errorMessage); // always assign even if null, to reset back to null if there was an error message before
+    setNearbyCitiesArr(fetchedData.cities); // If there is an error, cities === null;
   };
 
   // Update nearby city list
   useEffect(() => {
+    setInputError(null); // reset errors first to allow loading animation to be shown (existing errors override the loading animation in ButtonsFromCityArray)
     getNearbyCities(mainCity.id);
 
     return function () {
@@ -59,47 +49,47 @@ function NearbyCities({
 
   return (
     // TransitionGroup allows me to manage child CSStransitions as a group and to keep both "entering" and "exiting" elements under my control using the "key" attribute
-    <TransitionGroup component="section" className={`${cssClass} nearby-cities`}>
+    <TransitionGroup
+      component="section"
+      className={`${cssClass} nearby-cities`}
+    >
+      {/* List of nearby cities found */}
 
-      {/* Found nearby cities */}
-
-      <ButtonsFromCityArray
-        cityArray={nearbyCitiesArr}
-        mainCity={mainCity}
-        setNearbyCity={setNearbyCity}
-        headerText={"Nearby cities"}
-        className={"nearby-cities__buttons"}
-      />
+      <div className={"nearby-cities__buttons"}>
+        <h3 className="nearby-cities__header">Nearby cities</h3>
+        <ButtonsFromCityArray
+          cityArray={nearbyCitiesArr}
+          mainCity={mainCity}
+          inputError={inputError}
+          setNearbyCity={setNearbyCity}
+        />
+      </div>
 
       {/* Information for selected nearby city (can be empty if none selected) */}
 
       {nearbyCity && (
         <CSSTransition
-        classNames="nearby-city"
-        key={nearbyCity.id} // key is crucial to keep both entering and exiting div under React's control (and on screen until timeout finishes)
-        timeout={{ enter: 300, exit: 300 }}
-      >
-        <div
-          className={`nearby-cities__info details`}
+          classNames="nearby-city"
+          key={nearbyCity.id} // key is crucial to keep both entering and exiting div under React's control (and on screen until timeout finishes)
+          timeout={{ enter: 300, exit: 300 }}
         >
-          <CityInfo
-            city={nearbyCity}
-            dontShowCountry={nearbyCity.countryCode === mainCity.countryCode}
-          />
-          <button
-            className="details__change-button"
-            onClick={() => {
-              setNearbyCity(null); // reset nearby city
-              setMainCity(nearbyCity);
-            }}
-          >
-            Set as main city
-          </button>
-          
-        </div>
+          <div className={`nearby-cities__info details`}>
+            <CityInfo
+              city={nearbyCity}
+              dontShowCountry={nearbyCity.countryCode === mainCity.countryCode}
+            />
+            <button
+              className="details__change-button"
+              onClick={() => {
+                setNearbyCity(null); // reset nearby city
+                setMainCity(nearbyCity);
+              }}
+            >
+              Set as main city
+            </button>
+          </div>
         </CSSTransition>
       )}
-
     </TransitionGroup>
   );
 }
