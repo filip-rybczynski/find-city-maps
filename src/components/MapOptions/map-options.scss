@@ -1,11 +1,15 @@
 @import "./../../styles/button-template.scss";
 
+button {
+  @include button(0.8);
+}
+
 .map-options {
   display: flex;
   align-items: center;
 
   &__center {
-    width: 40%;
+    width: 35%;
     display: flex;
     justify-content: center;
 
@@ -17,9 +21,13 @@
       flex: 1 0 auto;
 
       margin: 0 0.75rem;
-
-      @include button(0.8);
     }
+  }
+
+  &__zoom-reset {
+    margin: 0.9rem 0.25rem 0 0.75rem;
+    padding-right: 1rem;
+    padding-left: 1rem;
   }
 
   &__markers {
