@@ -32,7 +32,8 @@ function CitySearchDropdown({
     // (Simpler than mounting/unmounting)
     const isOutside =
       !e.target.closest(`[id=dropdown]`) &&
-      !e.target.closest(`[id=city-search]`);
+      !e.target.closest(`[id=city-search]`) &&
+      !e.target.closest(`[type=submit]`);
 
     setIfHidden(isOutside);
   };

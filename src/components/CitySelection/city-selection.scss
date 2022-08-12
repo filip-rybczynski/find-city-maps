@@ -53,6 +53,10 @@
     border-radius: 0.75rem;
 
     font-size: inherit;
+
+    &:focus {
+      outline: 3px solid lightblue;
+    }
   }
 
   &__country-tag {
@@ -74,5 +78,15 @@
 
     width: 100px;
     height: 2.2rem;
+  }
+
+  &__input-error {
+    position: absolute;
+    bottom: 100%;
+    right: 0;
+
+    margin: 0 0 0.5rem;
+
+    color: crimson;
   }
 }
