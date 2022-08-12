@@ -13,7 +13,10 @@ function CitySearchDropdown({
   dropdownCities,
   setCurrentCity,
   setSearchInputValue,
+<<<<<<< HEAD
   inputError,
+=======
+>>>>>>> 4a723e245b09e3bb22cdbfdc7c2f1407c8e911b5
   isHidden,
   setIfHidden,
 }) {
@@ -55,7 +58,7 @@ function CitySearchDropdown({
     return inputError ? (
       <span className={"dropdown dropdown__error"}>{inputError}</span>
     ) : (
-     <span className={`dropdown ${isHidden && "hidden"}`}>
+      <span className={`dropdown ${isHidden && "hidden"}`}>
         <LoadingAnimation />
       </span>
     ); // return loading component if dropdownCities is not populated at all (meaning no search was ran)
