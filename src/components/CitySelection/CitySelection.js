@@ -1,5 +1,5 @@
 // React
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 
 // components
@@ -21,6 +21,14 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
   // const [inputError, setInputError] = useState(''); // TODO
   const [hideDropdown, setHideDropdown] = useState(false); // Used to temporarily hide dropdown when user clicks outside of its bounds (or outside of the input).
   // Handling primarily in the CitySearchDropdown component
+  const [submitError, setSubmitError] = useState(null); // Error for submit attempts with no city selected
+
+  // clear any input errors after a city is successfully chosen from the dropdown
+  useEffect(() => {
+    setSubmitError(null);
+  }, [currentCity])
+
+  const inputFocusRef = useRef(null);
 
   // Fetch data and update the state
   const getData = async (input) => {
@@ -60,9 +68,10 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
     // 2. Update controlled input value via state update
     setSearchInputValue(e.target.value);
 
-    // 3. Since we are searching for cities again, clear currentCity. This will show dropdown list again and remove the country tag visible in the input field
+    // 3. Since we are searching for cities again, clear currentCity and dropdown city list, as well as any potential error. This will show dropdown list again and remove the country tag visible in the input field
     setCurrentCity(null);
     setDropdownCities(null);
+    setSubmitError(null);
 
     // 4. Fetch cities for dropdown list
     debouncedGetData(e.target.value);
@@ -81,9 +90,27 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
     setDropdownCities(null);
   };
 
+  const checkIfCanSubmit = (e) => {
+    e.preventDefault();
+
+    if (currentCity) {
+      setSubmitError(null);
+      handleSubmit(e);
+      return;
+    }
+
+    inputFocusRef.current.focus();
+
+    if (searchInputValue === "") {
+      setSubmitError("Please select a city first");
+    } else {
+      setSubmitError("Please select a city from the dropdown");
+    }
+  };
+
   const showDropdownIfHidden = (e) => {
     if (hideDropdown) setHideDropdown(!hideDropdown);
-  }
+  };
 
   const generateDropdownComponent = !currentCity && searchInputValue; // Dropdown should appear if there is no city selected yet (in input), but the user is typing (searchInputValue is not empty)
 
@@ -94,17 +121,23 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
       {/* City search */}
       <form className="city-search">
         <label className="city-search__label" htmlFor="city-search">
-          City name
+          Find a city name
         </label>
         <div className="city-search__search-bar">
-          <div className="city-search__input-container">
+          <span className="city-search__input-container">
+            {submitError && (
+              <span className="city-search__input-error">{submitError}</span>
+            )}
             <input
               className={"city-search__input"}
               id="city-search"
               name="city-search"
               value={searchInputValue}
+              placeholder="Start typing..."
+              ref={inputFocusRef}
               onChange={handleInputChange}
               onClick={showDropdownIfHidden}
+              onFocus={() => setSubmitError(null)}
             />
             {
               // country tag to clarify which country the city's from
@@ -114,7 +147,7 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
                 </span>
               )
             }
-          </div>
+          </span>
           {/* Dropdown */}
           {generateDropdownComponent && (
             <CitySearchDropdown
@@ -126,7 +159,7 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
             />
           )}
           {/* Display button */}
-          <button className={"city-search__button"} onClick={handleSubmit}>
+          <button type="submit" className={"city-search__button"} onClick={checkIfCanSubmit}>
             Display
           </button>
         </div>
