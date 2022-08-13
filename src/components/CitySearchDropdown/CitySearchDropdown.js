@@ -19,7 +19,7 @@ function CitySearchDropdown({
 }) {
   const chooseFocusedOption = (e) => {
     let keycode = e.keyCode ? e.keyCode : e.which;
-    if (keycode === 13 || keycode === 32) {
+    if (keycode === 13) {
       document.activeElement.click();
       // Worth considering:
       // https://stackoverflow.com/questions/58886782/how-to-find-focused-react-component-like-document-activeelement
