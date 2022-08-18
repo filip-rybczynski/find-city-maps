@@ -1,5 +1,16 @@
 @import "./../../styles/button-template.scss";
 
+@mixin input-width {
+  min-width: 400px;
+  width: calc(95% - 100px);
+}
+
+@mixin focus {
+  &:focus {
+    outline: 3px solid skyblue;
+  }
+}
+
 .city-selection {
   width: 70%;
   min-width: 560px;
@@ -20,16 +31,29 @@
 }
 
 .city-search {
-  &__label {
+  &__label-container {
     padding: 0;
-    margin: 0 0 0.5rem 0.2rem;
-    display: block;
+    margin: 0 0 0.5rem;
+    padding: 0 0.2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+
+    @include input-width;
+  }
+
+  &__main-label {
     font-size: 1.2rem;
+  }
+
+  &__error-label {
+    color: crimson;
   }
 
   &__search-bar {
     display: flex;
     justify-content: space-between;
+    flex-wrap: wrap;
 
     position: relative; // for positioning the dropdown list
 
@@ -40,8 +64,7 @@
     // for positioning the country tag
     position: relative;
 
-    min-width: 400px;
-    width: calc(95% - 100px);
+    @include input-width;
   }
 
   &__input {
@@ -54,9 +77,7 @@
 
     font-size: inherit;
 
-    &:focus {
-      outline: 3px solid lightblue;
-    }
+    @include focus;
   }
 
   &__country-tag {
@@ -78,6 +99,8 @@
 
     width: 100px;
     height: 2.2rem;
+
+    @include focus;
   }
 
   &__input-error {

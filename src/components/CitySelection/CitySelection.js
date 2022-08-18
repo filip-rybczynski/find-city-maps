@@ -124,17 +124,25 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
 
       {/* City search */}
       <form className="city-search">
-        <label className="city-search__label" htmlFor="city-search">
-          Find a city name
-        </label>
-        <div className="city-search__search-bar">
+      <div className="city-search__search-bar">
+
+        <span className="city-search__label-container">
+          <label className="city-search__main-label" htmlFor="input">
+            Find a city name
+          </label>
+          {submitError && (
+            <label
+              className="city-search__error-label"
+              htmlFor="input"
+            >
+              {submitError}
+            </label>
+          )}
+        </span>
           <span className="city-search__input-container">
-            {submitError && (
-              <span className="city-search__input-error">{submitError}</span>
-            )}
             <input
               className={"city-search__input"}
-              id="city-search"
+              id="input"
               name="city-search"
               value={searchInputValue}
               placeholder="Start typing..."
