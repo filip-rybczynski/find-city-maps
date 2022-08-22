@@ -106,7 +106,7 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
     inputFocusRef.current.focus();
 
     if (searchInputValue === "") {
-      setSubmitError("Please select a city first");
+      setSubmitError("Please search for a city first");
     } else {
       setSubmitError("Please select a city from the dropdown");
     }
@@ -123,21 +123,29 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
       <header className="city-selection__header">Select city</header>
 
       {/* City search */}
-      <form className="city-search">
-        <label className="city-search__label" htmlFor="city-search">
-          Find a city name
-        </label>
-        <div className="city-search__search-bar">
+      <form className="city-search" onSubmit={checkIfCanSubmit}>
+      <div className="city-search__search-bar">
+
+        <span className="city-search__label-container">
+          <label className="city-search__main-label" htmlFor="input">
+            Find a city name
+          </label>
+          {submitError && (
+            <label
+              className="city-search__error-label"
+              htmlFor="input"
+            >
+              {submitError}
+            </label>
+          )}
+        </span>
           <span className="city-search__input-container">
-            {submitError && (
-              <span className="city-search__input-error">{submitError}</span>
-            )}
             <input
               className={"city-search__input"}
-              id="city-search"
+              id="input"
               name="city-search"
               value={searchInputValue}
-              placeholder="Start typing..."
+              placeholder="Start typing to search..."
               ref={inputFocusRef}
               onChange={handleInputChange}
               onClick={showDropdownIfHidden}
@@ -164,7 +172,7 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
             />
           )}
           {/* Display button */}
-          <button type="submit" className={"city-search__button"} onClick={checkIfCanSubmit}>
+          <button type="submit" className={"city-search__button"}>
             Display
           </button>
         </div>
