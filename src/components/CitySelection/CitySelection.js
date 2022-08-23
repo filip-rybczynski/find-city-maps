@@ -22,11 +22,12 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
   const [hideDropdown, setHideDropdown] = useState(false); // Used to temporarily hide dropdown when user clicks outside of its bounds (or outside of the input).
   // Handling primarily in the CitySearchDropdown component
   const [submitError, setSubmitError] = useState(null); // Error for submit attempts with no city selected
+  const [activeDropdownItem, setActiveDropdownItem] = useState(null); //
 
   // clear any input errors after a city is successfully chosen from the dropdown
   useEffect(() => {
     setSubmitError(null);
-  }, [currentCity])
+  }, [currentCity]);
 
   const inputFocusRef = useRef(null);
 
@@ -76,6 +77,7 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
     setDropdownCities(null);
     setInputError(null);
     setSubmitError(null);
+    setActiveDropdownItem(null);
 
     // 4. Fetch cities for dropdown list
     debouncedGetData(e.target.value);
@@ -103,6 +105,13 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
       return;
     }
 
+    if (activeDropdownItem !== null) {
+      setCurrentCity(dropdownCities[activeDropdownItem]);
+      setSearchInputValue(dropdownCities[activeDropdownItem].name);
+      setActiveDropdownItem(null);
+      return;
+    }
+
     inputFocusRef.current.focus();
 
     if (searchInputValue === "") {
@@ -112,8 +121,30 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
     }
   };
 
-  const showDropdownIfHidden = (e) => {
-    if (hideDropdown) setHideDropdown(!hideDropdown);
+  const handleFocus = (e) => {
+    setHideDropdown(false);
+    setSubmitError(null);
+  };
+
+  const navigateDropdown = (e) => {
+    const key = e.key || e.keyCode || e.which;
+
+    if (key === "ArrowUp" || key === 38) e.preventDefault(); // to avoid cursor going back to the beginning of the input
+    if (!dropdownCities) return;
+    if (!["ArrowUp", "ArrowDown", 38, 40].includes(key)) return;
+    const length = dropdownCities.length;
+
+    if (key === "ArrowDown" || key === 38) {
+      setActiveDropdownItem(
+        activeDropdownItem !== null ? (activeDropdownItem + 1) % length : 0
+      );
+    }
+
+    if (key === "ArrowUp" || key === 40) {
+      setActiveDropdownItem(
+        activeDropdownItem ? activeDropdownItem - 1 : length - 1
+      );
+    }
   };
 
   const generateDropdownComponent = !currentCity && searchInputValue; // Dropdown should appear if there is no city selected yet (in input), but the user is typing (searchInputValue is not empty)
@@ -124,32 +155,30 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
 
       {/* City search */}
       <form className="city-search" onSubmit={checkIfCanSubmit}>
-      <div className="city-search__search-bar">
-
-        <span className="city-search__label-container">
-          <label className="city-search__main-label" htmlFor="input">
-            Find a city name
-          </label>
-          {submitError && (
-            <label
-              className="city-search__error-label"
-              htmlFor="input"
-            >
-              {submitError}
+        <div className="city-search__search-bar">
+          <span className="city-search__label-container">
+            <label className="city-search__main-label" htmlFor="input">
+              Find a city name
             </label>
-          )}
-        </span>
+            {submitError && (
+              <label className="city-search__error-label" htmlFor="input">
+                {submitError}
+              </label>
+            )}
+          </span>
           <span className="city-search__input-container">
             <input
               className={"city-search__input"}
-              id="input"
+              id="city-search"
               name="city-search"
               value={searchInputValue}
               placeholder="Start typing to search..."
               ref={inputFocusRef}
               onChange={handleInputChange}
-              onClick={showDropdownIfHidden}
-              onFocus={() => setSubmitError(null)}
+              onFocus={handleFocus}
+              onKeyDown={(e) => {
+                navigateDropdown(e);
+              }}
             />
             {
               // country tag to clarify which country the city's from
@@ -169,6 +198,7 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
               inputError={inputError}
               isHidden={hideDropdown}
               setIfHidden={setHideDropdown}
+              activeDropdownItem={activeDropdownItem}
             />
           )}
           {/* Display button */}
