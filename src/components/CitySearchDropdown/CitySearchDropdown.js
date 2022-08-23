@@ -16,12 +16,18 @@ function CitySearchDropdown({
   inputError,
   isHidden,
   setIfHidden,
+  activeDropdownItem,
 }) {
-  const chooseFocusedOption = (e) => {
+  const selectIfEnter = (e) => {
+    console.log("selectIfEnter function") // TODO must be in input + dropdown to trigger
+    e.preventDefault(); // Otherwise input will attempt to submit
     let keycode = e.keyCode ? e.keyCode : e.which;
     if (keycode === 13) {
-      document.activeElement.click();
-      // Worth considering:
+      setCurrentCity(dropdownCities[activeDropdownItem]);
+      setSearchInputValue(dropdownCities[activeDropdownItem].name)
+      // Previously was:
+      // document.activeElement.click();
+      // Related:
       // https://stackoverflow.com/questions/58886782/how-to-find-focused-react-component-like-document-activeelement
     }
   };
@@ -71,15 +77,16 @@ function CitySearchDropdown({
     <ul
       className={`dropdown ${isHidden && "hidden"}`}
       id="dropdown"
-      onKeyPress={chooseFocusedOption}
+      onKeyPress={selectIfEnter}
     >
       {dropdownCities &&
-        dropdownCities.map((city) => (
+        dropdownCities.map((city, index) => (
           <DropdownItem
             key={city.id}
             city={city}
             setCurrentCity={setCurrentCity}
             setSearchInputValue={setSearchInputValue}
+            active={activeDropdownItem === index}
           />
         ))}
     </ul>
