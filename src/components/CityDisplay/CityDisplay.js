@@ -20,11 +20,16 @@ function CityDisplay({
 
   // Whenever the main city displayed changes, we should clear any selected nearby city
   useEffect(() => {
-    if (nearbyCity !== null) setNearbyCity(null); 
+    if (nearbyCity !== null) setNearbyCity(null);
+  }, [mainCity]);
+
+  // When new city is displayed, scroll down to the city display section
+  useEffect(() => {
+    document.querySelector("#city-display").scrollIntoView();
   }, [mainCity]);
 
   return (
-    <article className={"city-display"}>
+    <article className={"city-display"} id={"city-display"}>
       <h2>{mainCity.name}</h2>
       <div className="city-display__information">
         <section className="city-display__general-info main-info">
