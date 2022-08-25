@@ -78,6 +78,12 @@
     font-size: inherit;
 
     @include focus;
+
+    &:hover + .city-search__country-tag,
+    &:focus + .city-search__country-tag {
+      // Shifting the country tag to make room for the "x" to delete search input content
+      right: 2.3rem;
+    }
   }
 
   &__country-tag {
@@ -92,6 +98,8 @@
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* IE 10 and IE 11 */
     user-select: none;
+
+    pointer-events: none; // so it doesn't interfere with activating the "x" for the input on hover
   }
 
   &__button {

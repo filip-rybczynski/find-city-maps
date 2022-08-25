@@ -169,6 +169,7 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
           <span className="city-search__input-container">
             <input
               className={"city-search__input"}
+              type="search"
               id="city-search"
               name="city-search"
               value={searchInputValue}
