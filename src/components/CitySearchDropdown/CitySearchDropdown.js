@@ -11,19 +11,17 @@ import "./city-search-dropdown.scss";
 
 function CitySearchDropdown({
   dropdownCities,
-  setCurrentCity,
-  setSearchInputValue,
+  selectCity,
   inputError,
   isHidden,
   setIfHidden,
   activeDropdownItem,
 }) {
-  const selectIfEnter = (e) => {
+  const selectIfEnter = (e) => { // TODO redundant? Since it's within checkIfSubmit?
     e.preventDefault(); // Otherwise input will attempt to submit
     let keycode = e.keyCode ? e.keyCode : e.which;
     if (keycode === 13) {
-      setCurrentCity(dropdownCities[activeDropdownItem]);
-      setSearchInputValue(dropdownCities[activeDropdownItem].name)
+      selectCity(dropdownCities[activeDropdownItem])
       // Previously was:
       // document.activeElement.click();
       // Related:
@@ -83,8 +81,7 @@ function CitySearchDropdown({
           <DropdownItem
             key={city.id}
             city={city}
-            setCurrentCity={setCurrentCity}
-            setSearchInputValue={setSearchInputValue}
+            selectCity={selectCity}
             active={activeDropdownItem === index}
           />
         ))}
@@ -94,8 +91,7 @@ function CitySearchDropdown({
 
 CitySearchDropdown.propTypes = {
   dropdownCities: PropTypes.array,
-  setSearchInputValue: PropTypes.func,
-  setCurrentCity: PropTypes.func,
+  selectCity: PropTypes.func,
   inputError: PropTypes.string,
 };
 

@@ -105,10 +105,11 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
       return;
     }
 
-    if (activeDropdownItem !== null) {
-      setCurrentCity(dropdownCities[activeDropdownItem]);
-      setSearchInputValue(dropdownCities[activeDropdownItem].name);
-      setActiveDropdownItem(null);
+    // TODO this should not be here - I must separate "Enter" from "Submit"
+    // If there is an active dropdown element, set it as an input value //TODO and submit?
+    
+    if (activeDropdownItem !== null) { // maybe use e.key === 13 as another condition
+      selectCity(dropdownCities[activeDropdownItem]);
       return;
     }
 
@@ -145,6 +146,12 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
         activeDropdownItem ? activeDropdownItem - 1 : length - 1
       );
     }
+  };
+
+  const selectCity = (city) => {
+    setCurrentCity(city);
+    setSearchInputValue(city.name);
+    setActiveDropdownItem(null);
   };
 
   const generateDropdownComponent = !currentCity && searchInputValue; // Dropdown should appear if there is no city selected yet (in input), but the user is typing (searchInputValue is not empty)
@@ -194,8 +201,7 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
           {generateDropdownComponent && (
             <CitySearchDropdown
               dropdownCities={dropdownCities}
-              setSearchInputValue={setSearchInputValue}
-              setCurrentCity={setCurrentCity}
+              selectCity={selectCity}
               inputError={inputError}
               isHidden={hideDropdown}
               setIfHidden={setHideDropdown}

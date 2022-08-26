@@ -5,16 +5,14 @@ import PropTypes from "prop-types";
 // styles
 import "./dropdown-item.scss";
 
-function DropdownItem({ setCurrentCity, setSearchInputValue, city, active }) {
-  const chooseListItem = () => {
-    setCurrentCity(city);
-    setSearchInputValue(city.name);
-  };
+function DropdownItem({ selectCity, city, active }) {
+
+  const selectThisCity = selectCity.bind(null, city);
 
   return (
     <li
       className={`dropdown-item ${active && "active"}`}
-      onClick={chooseListItem}
+      onClick={selectThisCity}
     >{`${city.name} (${city.country})`}</li>
   );
 }
