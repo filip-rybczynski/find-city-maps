@@ -17,17 +17,6 @@ function CitySearchDropdown({
   setIfHidden,
   activeDropdownItem,
 }) {
-  const selectIfEnter = (e) => { // TODO redundant? Since it's within checkIfSubmit?
-    e.preventDefault(); // Otherwise input will attempt to submit
-    let keycode = e.keyCode ? e.keyCode : e.which;
-    if (keycode === 13) {
-      selectCity(dropdownCities[activeDropdownItem])
-      // Previously was:
-      // document.activeElement.click();
-      // Related:
-      // https://stackoverflow.com/questions/58886782/how-to-find-focused-react-component-like-document-activeelement
-    }
-  };
 
   const handleClickOutside = (e) => {
     // If click is outside of the dropdown OR the input, dropdown should be hidden
@@ -74,7 +63,6 @@ function CitySearchDropdown({
     <ul
       className={`dropdown ${isHidden && "hidden"}`}
       id="dropdown"
-      onKeyPress={selectIfEnter}
     >
       {dropdownCities &&
         dropdownCities.map((city, index) => (
