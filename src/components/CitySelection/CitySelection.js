@@ -22,7 +22,6 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
   const [currentCity, setCurrentCity] = useState(null); // current city selected in the input (data already fetched)
   const [inputError, setInputError] = useState(null);
   const [hideDropdown, setHideDropdown] = useState(false); // Used to temporarily hide dropdown when user clicks outside of its bounds (or outside of the input).
-  // Handling primarily in the CitySearchDropdown component
   const [submitError, setSubmitError] = useState(null); // Error for submit attempts with no city selected
   const [activeDropdownItem, setActiveDropdownItem] = useState(null); //
 
@@ -105,27 +104,30 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
     if (searchInputValue === "") {
       setSubmitError("Please search for a city first");
     } else {
+      console.log("should have error!");
       setSubmitError("Please select a city from the dropdown");
     }
 
     inputFocusRef.current.focus();
   };
 
-  const handleFocus = () => {
-    setHideDropdown(false);
-    setSubmitError(null);
-  };
-
   const handleKeyDown = (e) => {
     const key = e.key || e.keyCode || e.which;
 
-    if (key === "Enter" || key === 38) {
+    // Handle dropdown item selection if there is an active item
+    if (key === "Enter" || key === 13) {
       if (activeDropdownItem !== null) {
         e.preventDefault(); // To avoid form submission through event bubbling
         selectCity(dropdownCities[activeDropdownItem]);
         return;
       }
     }
+
+    // Hide dropdown when tabbing out of the input
+    // onBlur not used since there are two common scenarios where loss of focus shouldn't hide dropdown
+    //  1. When clicking on the dropdown itself
+    //  2. When clicking on the Submit button
+    if (key === "Tab" || key === 9) setHideDropdown(true);
 
     if (!["ArrowUp", "ArrowDown", 38, 40].includes(key)) return;
     if (key === "ArrowUp" || key === 38) e.preventDefault(); // to avoid cursor going back to the beginning of the input
@@ -176,7 +178,9 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
               placeholder="Start typing to search..."
               ref={inputFocusRef}
               onChange={handleInputChange}
-              onFocus={handleFocus}
+              onFocus={() => {
+                setHideDropdown(false);
+              }}
               onKeyDown={handleKeyDown}
             />
             {

@@ -23,7 +23,7 @@ function CitySearchDropdown({
     // Dropdown hiding handled using a special "hidden" class (display: none)
     // (Simpler than mounting/unmounting)
     const isOutside =
-      !e.target.closest(`[id=dropdown]`) &&
+      !(e.target.nextSibling.id === "dropdown") && // dropdown is the next sibling of the input it's assigned to
       !e.target.closest(`[id=city-search]`) &&
       !e.target.closest(`[type=submit]`);
 
