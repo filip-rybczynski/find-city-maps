@@ -18,9 +18,9 @@ import "./city-selection.scss";
 
 function CitySelection({ setMainCity, setApiCallsLeft }) {
   const [dropdownCities, setDropdownCities] = useState(null); // list (array) of cities that appear in the search input field's dropdown. Value is NULL when input is empty (so there is no search/fetching data). If there is an array, even empty, it means input is populated/search was ran.
+  const [dropdownError, setDropdownError] = useState(null);
   const [searchInputValue, setSearchInputValue] = useState(""); // value of search input (controlled input)
   const [currentCity, setCurrentCity] = useState(null); // current city selected in the input (data already fetched)
-  const [inputError, setInputError] = useState(null);
   const [hideDropdown, setHideDropdown] = useState(false); // Used to temporarily hide dropdown when user clicks outside of its bounds (or outside of the input).
   const [submitError, setSubmitError] = useState(null); // Error for submit attempts with no city selected
   const [activeDropdownItem, setActiveDropdownItem] = useState(null); //
@@ -52,7 +52,7 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
 
     // 4. Update state
     setApiCallsLeft(fetchedData.apiCallsLeft);
-    setInputError(fetchedData.errorMessage); // always assign even if null, to reset back to null if there was an error message before
+    setDropdownError(fetchedData.errorMessage); // always assign even if null, to reset back to null if there was an error message before
     setDropdownCities(fetchedData.cities); // If there is an error, cities === null;
   };
 
@@ -76,7 +76,7 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
     setToNull(
       setCurrentCity,
       setDropdownCities,
-      setInputError,
+      setDropdownError,
       setSubmitError,
       setActiveDropdownItem
     );
@@ -104,7 +104,6 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
     if (searchInputValue === "") {
       setSubmitError("Please search for a city first");
     } else {
-      console.log("should have error!");
       setSubmitError("Please select a city from the dropdown");
     }
 
@@ -114,7 +113,15 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
   const handleKeyDown = (e) => {
     const key = e.key || e.keyCode || e.which;
 
-    // Handle dropdown item selection if there is an active item
+    // Hide dropdown when tabbing out of the input
+    // onBlur not used since there are two common scenarios where loss of focus shouldn't hide dropdown
+    //  1. When clicking on the dropdown itself
+    //  2. When clicking on the Submit button
+    if (key === "Tab" || key === 9) setHideDropdown(true);
+    
+    if (!dropdownCities) return; // Nothing to do if there's no city content in the dropdown
+
+    // Handle dropdown item selection if there is an active item (instead of trying to submit with an empty input)
     if (key === "Enter" || key === 13) {
       if (activeDropdownItem !== null) {
         e.preventDefault(); // To avoid form submission through event bubbling
@@ -123,15 +130,8 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
       }
     }
 
-    // Hide dropdown when tabbing out of the input
-    // onBlur not used since there are two common scenarios where loss of focus shouldn't hide dropdown
-    //  1. When clicking on the dropdown itself
-    //  2. When clicking on the Submit button
-    if (key === "Tab" || key === 9) setHideDropdown(true);
-
     if (!["ArrowUp", "ArrowDown", 38, 40].includes(key)) return;
     if (key === "ArrowUp" || key === 38) e.preventDefault(); // to avoid cursor going back to the beginning of the input
-    if (!dropdownCities) return;
 
     const newActiveItem = navigateArray(
       key,
@@ -159,11 +159,11 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
       <form className="city-search" onSubmit={handleSubmit}>
         <div className="city-search__search-bar">
           <span className="city-search__label-container">
-            <label className="city-search__main-label" htmlFor="input">
+            <label className="city-search__main-label" htmlFor="city-search">
               Find a city name
             </label>
             {submitError && (
-              <label className="city-search__error-label" htmlFor="input">
+              <label className="city-search__error-label" htmlFor="city-search">
                 {submitError}
               </label>
             )}
@@ -194,9 +194,8 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
             {/* Dropdown */}
             {generateDropdownComponent && (
               <CitySearchDropdown
-                dropdownCities={dropdownCities}
                 selectCity={selectCity}
-                inputError={inputError}
+                dropdownContent={dropdownCities || dropdownError}
                 isHidden={hideDropdown}
                 setIfHidden={setHideDropdown}
                 activeDropdownItem={activeDropdownItem}

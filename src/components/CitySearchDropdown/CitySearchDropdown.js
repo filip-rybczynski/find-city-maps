@@ -1,5 +1,5 @@
 // React
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 
 // components
@@ -10,14 +10,12 @@ import LoadingAnimation from "../LoadingAnimation/LoadingAnimation";
 import "./city-search-dropdown.scss";
 
 function CitySearchDropdown({
-  dropdownCities,
   selectCity,
-  inputError,
+  dropdownContent,
   isHidden,
   setIfHidden,
   activeDropdownItem,
 }) {
-
   const handleClickOutside = (e) => {
     // If click is outside of the dropdown OR the input, dropdown should be hidden
     // Dropdown hiding handled using a special "hidden" class (display: none)
@@ -43,44 +41,55 @@ function CitySearchDropdown({
     };
   }, [isHidden]);
 
-  if (dropdownCities === null)
-    return inputError ? (
-      <span className={"dropdown dropdown__error"}>{inputError}</span>
-    ) : (
+  const content =
+    dropdownContent && // null if no array or error
+    (() => {
+      if (typeof dropdownContent === "string") {
+        return (
+          <span className={"dropdown dropdown__error"}>{dropdownContent}</span>
+        );
+      } else if (dropdownContent.length === 0) {
+        return (
+          <span
+            className={`dropdown dropdown__no-results ${isHidden && "hidden"}`}
+            id="dropdown"
+          >
+            Sorry, no results!
+          </span>
+        );
+      } else
+        return (
+          <ul className={`dropdown ${isHidden && "hidden"}`} id="dropdown">
+            {dropdownContent.map((city, index) => (
+              <DropdownItem
+                key={city.id}
+                city={city}
+                selectCity={selectCity}
+                active={activeDropdownItem === index}
+              />
+            ))}
+          </ul>
+        );
+    })();
+
+  return (
+    content || (
       <span className={`dropdown ${isHidden && "hidden"}`}>
         <LoadingAnimation />
       </span>
-    ); // return loading component if dropdownCities is not populated at all (meaning no search was ran)
-
-  return dropdownCities.length === 0 ? (
-    <span
-      className={`dropdown dropdown__no-results ${isHidden && "hidden"}`}
-      id="dropdown"
-    >
-      Sorry, no results!
-    </span>
-  ) : (
-    <ul
-      className={`dropdown ${isHidden && "hidden"}`}
-      id="dropdown"
-    >
-      {dropdownCities &&
-        dropdownCities.map((city, index) => (
-          <DropdownItem
-            key={city.id}
-            city={city}
-            selectCity={selectCity}
-            active={activeDropdownItem === index}
-          />
-        ))}
-    </ul>
-  );
+    )
+  ); // return loading component if dropdownCities is not populated at all (meaning no search was ran)
 }
 
 CitySearchDropdown.propTypes = {
-  dropdownCities: PropTypes.array,
+  dropdownContent: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.array,
+  ]),
   selectCity: PropTypes.func,
-  inputError: PropTypes.string,
+  isHidden: PropTypes.bool,
+  setIfHidden: PropTypes.func,
+  activeDropdownItem: PropTypes.number,
 };
 
 export default CitySearchDropdown;
