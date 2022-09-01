@@ -15,14 +15,15 @@ import setToNull from "../../functions/setToNull";
 import "./city-selection.scss";
 
 function CitySelection({ setMainCity, setApiCallsLeft }) {
-  const [dropdownCities, setDropdownCities] = useState(null); // list (array) of cities that appear in the search input field's dropdown. Value is NULL when input is empty (so there is no search/fetching data). If there is an array, even empty, it means input is populated/search was ran.
-  const [dropdownError, setDropdownError] = useState(null);
+  const [dropdownContent, setDropdownContent] = useState(null); // This can be either:
+  // - list (array) of cities that appear in the search input field's dropdown. Value is NULL when input is empty (so there is no search/fetching data). If there is an array, even empty, it means input is populated/search was ran.
+  // - error message (string)
   const [searchInputValue, setSearchInputValue] = useState(""); // value of search input (controlled input). Raised to this component in order to be cleared on submission
   const [currentCity, setCurrentCity] = useState(null); // current city selected in the input (data already fetched)
   const [submitError, setSubmitError] = useState(null); // Error for submit attempts with no city selected
 
   const inputFocusRef = useRef(null);
-  
+
   // clear any input errors after a city is successfully chosen from the dropdown
   useEffect(() => {
     setSubmitError(null);
@@ -30,26 +31,24 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
 
   // Fetch data and update the state
   const getData = async (input) => {
-    // 1. If input value is empty, set dropdown content to empty and return without fetching any data
-    if (input === "") {
-      setDropdownCities(null);
-      return;
-    }
+    // 1. If input value is empty, return without fetching any data
+    if (input === "") return;
+
+    // 2. make sure input is capitalized
     const searchPrefix = capitalize(input);
 
-    // 2. Generate URL
+    // 3. Generate URL
     // Params must be part of the URL due to limitations of the fetch API
     // https://github.com/github/fetch/issues/256
     // I don't need to change parameters in this function, so no issues
     const url = `https://wft-geo-db.p.rapidapi.com/v1/geo/cities?minPopulation=100000&limit=10&sort=-population&namePrefix=${searchPrefix}`;
 
-    // 3. Call fetching function
+    // 4. Call fetching function
     const fetchedData = await fetchGeoDBdata(url, searchPrefix); // second parameter is for additional filtering
 
-    // 4. Update state
+    // 5. Update state
     setApiCallsLeft(fetchedData.apiCallsLeft); // update API calls left count
-    setDropdownError(fetchedData.errorMessage); // always assign even if null, to reset back to null if there was an error message before
-    setDropdownCities(fetchedData.cities); // If there is an error, cities === null;
+    setDropdownContent(fetchedData.errorMessage || fetchedData.cities); // one of these will always be null
   };
 
   // useCallback used to ensure the debounced function references the same function across renders
@@ -68,13 +67,8 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
     setSearchInputValue(e.target.value);
 
     // 3. Since we are searching for cities again, clear currentCity and dropdown city list, as well as any potential error. This will show dropdown list again and remove the country tag visible in the input field
-    // Also clear dropdown cities and any error messages
-    setToNull(
-      setCurrentCity,
-      setDropdownCities,
-      setDropdownError,
-      setSubmitError
-    );
+    // Also clear dropdown content
+    setToNull(setCurrentCity, setDropdownContent, setSubmitError);
 
     // 4. Fetch cities for dropdown list
     debouncedGetData(e.target.value);
@@ -90,7 +84,7 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
 
       // 2. clear out the search input field, set currentCity, dropdownlist and submitError to null
       setSearchInputValue("");
-      setToNull(setCurrentCity, setDropdownCities, setSubmitError);
+      setToNull(setCurrentCity, setDropdownContent);
       return;
     }
 
@@ -119,7 +113,7 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
         <div className="city-selection__search-bar">
           <CitySearch
             searchInputValue={searchInputValue}
-            dropdownContent={dropdownCities || dropdownError}
+            dropdownContent={dropdownContent}
             handleInputChange={handleInputChange}
             selectCity={selectCity}
             currentCity={currentCity}

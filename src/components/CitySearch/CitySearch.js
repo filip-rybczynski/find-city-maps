@@ -1,5 +1,6 @@
 // React
 import React, { forwardRef, useState, useEffect } from "react";
+import PropTypes from "prop-types";
 
 // components
 import CitySearchDropdown from "../CitySearchDropdown/CitySearchDropdown";
@@ -118,5 +119,14 @@ const CitySearch = forwardRef(
     );
   }
 );
+
+CitySearch.propTypes = {
+  searchInputValue: PropTypes.string,
+  handleInputChange: PropTypes.func,
+  currentCity: PropTypes.object,
+  selectCity: PropTypes.func,
+  dropdownContent: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+  submitError: PropTypes.string,
+};
 
 export default CitySearch;
