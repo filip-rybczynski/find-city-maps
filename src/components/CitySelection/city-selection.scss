@@ -1,9 +1,4 @@
-@import "./../../styles/button-template.scss";
-
-@mixin input-width {
-  min-width: 400px;
-  width: calc(95% - 100px);
-}
+@import "./../../styles/button-template.scss"; // includes button mixin
 
 @mixin focus {
   &:focus {
@@ -28,27 +23,6 @@
     font-weight: bold;
     font-size: 1.5rem;
   }
-}
-
-.city-search {
-  &__label-container {
-    padding: 0;
-    margin: 0 0 0.5rem;
-    padding: 0 0.2rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-end;
-
-    @include input-width;
-  }
-
-  &__main-label {
-    font-size: 1.2rem;
-  }
-
-  &__error-label {
-    color: crimson;
-  }
 
   &__search-bar {
     display: flex;
@@ -60,48 +34,6 @@
     font-size: 1rem;
   }
 
-  &__input-container {
-    // for positioning the country tag
-    position: relative;
-
-    @include input-width;
-  }
-
-  &__input {
-    position: relative;
-
-    width: 100%;
-    padding: 6px 12px;
-
-    border-radius: 0.75rem;
-
-    font-size: inherit;
-
-    @include focus;
-
-    &:hover + .city-search__country-tag,
-    &:focus + .city-search__country-tag {
-      // Shifting the country tag to make room for the "x" to delete search input content
-      right: 2.3rem;
-    }
-  }
-
-  &__country-tag {
-    position: absolute;
-    bottom: calc(50% - 0.5rem);
-    right: 1rem;
-
-    opacity: 0.7;
-
-    font-size: inherit;
-
-    -webkit-user-select: none; /* Safari */
-    -ms-user-select: none; /* IE 10 and IE 11 */
-    user-select: none;
-
-    pointer-events: none; // so it doesn't interfere with activating the "x" for the input on hover
-  }
-
   &__button {
     @include button(1.1, bold);
 
@@ -109,25 +41,5 @@
     height: 2.2rem;
 
     @include focus;
-  }
-
-  &__input-error {
-    position: absolute;
-    bottom: 100%;
-    right: 0;
-
-    margin: 0 0 0.5rem;
-
-    color: crimson;
-  }
-
-  &__input-error {
-    position: absolute;
-    bottom: 100%;
-    right: 0;
-
-    margin: 0 0 0.5rem;
-
-    color: crimson;
   }
 }

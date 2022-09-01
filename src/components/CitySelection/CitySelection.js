@@ -3,15 +3,13 @@ import React, { useState, useCallback, useEffect, useRef } from "react";
 import PropTypes from "prop-types";
 
 // components
-import CitySearchDropdown from "../CitySearchDropdown/CitySearchDropdown";
+import CitySearch from "../CitySearch/CitySearch";
 
 // helper functions
 import debounce from "../../functions/debounce";
-import shortenNames from "../../functions/shortenNames";
 import capitalize from "./../../functions/capitalize";
 import fetchGeoDBdata from "../../functions/fetchGeoDBdata";
 import setToNull from "../../functions/setToNull";
-import navigateArray from "../../functions/navigateArray";
 
 // styles
 import "./city-selection.scss";
@@ -19,18 +17,16 @@ import "./city-selection.scss";
 function CitySelection({ setMainCity, setApiCallsLeft }) {
   const [dropdownCities, setDropdownCities] = useState(null); // list (array) of cities that appear in the search input field's dropdown. Value is NULL when input is empty (so there is no search/fetching data). If there is an array, even empty, it means input is populated/search was ran.
   const [dropdownError, setDropdownError] = useState(null);
-  const [searchInputValue, setSearchInputValue] = useState(""); // value of search input (controlled input)
+  const [searchInputValue, setSearchInputValue] = useState(""); // value of search input (controlled input). Raised to this component in order to be cleared on submission
   const [currentCity, setCurrentCity] = useState(null); // current city selected in the input (data already fetched)
-  const [hideDropdown, setHideDropdown] = useState(false); // Used to temporarily hide dropdown when user clicks outside of its bounds (or outside of the input).
   const [submitError, setSubmitError] = useState(null); // Error for submit attempts with no city selected
-  const [activeDropdownItem, setActiveDropdownItem] = useState(null); //
 
+  const inputFocusRef = useRef(null);
+  
   // clear any input errors after a city is successfully chosen from the dropdown
   useEffect(() => {
     setSubmitError(null);
   }, [currentCity]);
-
-  const inputFocusRef = useRef(null);
 
   // Fetch data and update the state
   const getData = async (input) => {
@@ -51,7 +47,7 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
     const fetchedData = await fetchGeoDBdata(url, searchPrefix); // second parameter is for additional filtering
 
     // 4. Update state
-    setApiCallsLeft(fetchedData.apiCallsLeft);
+    setApiCallsLeft(fetchedData.apiCallsLeft); // update API calls left count
     setDropdownError(fetchedData.errorMessage); // always assign even if null, to reset back to null if there was an error message before
     setDropdownCities(fetchedData.cities); // If there is an error, cities === null;
   };
@@ -77,8 +73,7 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
       setCurrentCity,
       setDropdownCities,
       setDropdownError,
-      setSubmitError,
-      setActiveDropdownItem
+      setSubmitError
     );
 
     // 4. Fetch cities for dropdown list
@@ -96,7 +91,6 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
       // 2. clear out the search input field, set currentCity, dropdownlist and submitError to null
       setSearchInputValue("");
       setToNull(setCurrentCity, setDropdownCities, setSubmitError);
-
       return;
     }
 
@@ -110,100 +104,30 @@ function CitySelection({ setMainCity, setApiCallsLeft }) {
     inputFocusRef.current.focus();
   };
 
-  const handleKeyDown = (e) => {
-    const key = e.key || e.keyCode || e.which;
-
-    // Hide dropdown when tabbing out of the input
-    // onBlur not used since there are two common scenarios where loss of focus shouldn't hide dropdown
-    //  1. When clicking on the dropdown itself
-    //  2. When clicking on the Submit button
-    if (key === "Tab" || key === 9) setHideDropdown(true);
-    
-    if (!dropdownCities) return; // Nothing to do if there's no city content in the dropdown
-
-    // Handle dropdown item selection if there is an active item (instead of trying to submit with an empty input)
-    if (key === "Enter" || key === 13) {
-      if (activeDropdownItem !== null) {
-        e.preventDefault(); // To avoid form submission through event bubbling
-        selectCity(dropdownCities[activeDropdownItem]);
-        return;
-      }
-    }
-
-    if (!["ArrowUp", "ArrowDown", 38, 40].includes(key)) return;
-    if (key === "ArrowUp" || key === 38) e.preventDefault(); // to avoid cursor going back to the beginning of the input
-
-    const newActiveItem = navigateArray(
-      key,
-      dropdownCities,
-      activeDropdownItem
-    );
-
-    setActiveDropdownItem(newActiveItem);
-  };
-
   const selectCity = (city) => {
     setCurrentCity(city);
     setSearchInputValue(city.name);
-    setActiveDropdownItem(null);
 
     inputFocusRef.current.focus(); // To retain focus on the input
   };
-
-  const generateDropdownComponent = !currentCity && searchInputValue; // Dropdown should appear if there is no city selected yet (in input), but the user is typing (searchInputValue is not empty)
 
   return (
     <div className={"city-selection"}>
       <header className="city-selection__header">Select city</header>
       {/* City search */}
-      <form className="city-search" onSubmit={handleSubmit}>
-        <div className="city-search__search-bar">
-          <span className="city-search__label-container">
-            <label className="city-search__main-label" htmlFor="city-search">
-              Find a city name
-            </label>
-            {submitError && (
-              <label className="city-search__error-label" htmlFor="city-search">
-                {submitError}
-              </label>
-            )}
-          </span>
-          <span className="city-search__input-container">
-            <input
-              className={"city-search__input"}
-              type="search"
-              id="city-search"
-              name="city-search"
-              value={searchInputValue}
-              placeholder="Start typing to search..."
-              ref={inputFocusRef}
-              onChange={handleInputChange}
-              onFocus={() => {
-                setHideDropdown(false);
-              }}
-              onKeyDown={handleKeyDown}
-            />
-            {
-              // country tag to clarify which country the city's from
-              currentCity && (
-                <span className={"city-search__country-tag"}>
-                  {`(${shortenNames(currentCity.country)})`}
-                </span>
-              )
-            }
-            {/* Dropdown */}
-            {generateDropdownComponent && (
-              <CitySearchDropdown
-                selectCity={selectCity}
-                dropdownContent={dropdownCities || dropdownError}
-                isHidden={hideDropdown}
-                setIfHidden={setHideDropdown}
-                activeDropdownItem={activeDropdownItem}
-              />
-            )}
-          </span>
+      <form className="city-selection__form" onSubmit={handleSubmit}>
+        <div className="city-selection__search-bar">
+          <CitySearch
+            searchInputValue={searchInputValue}
+            dropdownContent={dropdownCities || dropdownError}
+            handleInputChange={handleInputChange}
+            selectCity={selectCity}
+            currentCity={currentCity}
+            submitError={submitError}
+            ref={inputFocusRef}
+          />
           {/* Display button */}
-          <button type="submit" className={"city-search__button"}>
+          <button type="submit" className={"city-selection__button"}>
             Display
           </button>
         </div>
