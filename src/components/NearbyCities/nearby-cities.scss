@@ -135,9 +135,9 @@
 
   border-radius: 0.8rem;
 
-  background: lightgray;
-
   overflow: hidden;
+
+  background: lightgray;
 
   &__change-button {
     max-width: 20%;
@@ -150,6 +150,15 @@
 
     font-size: 0.9rem;
     font-weight: bold;
+  }
+}
+
+.nearby-city-enter,
+.nearby-city-exit {
+  // to ensure a smooth in-out transition, prevent all cells from wrapping
+  // otherwise, height of cells will change during while the table expands due to text content adjusting to the width
+  & td {
+    white-space: nowrap;
   }
 }
 

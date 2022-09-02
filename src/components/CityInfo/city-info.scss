@@ -9,19 +9,16 @@
     margin: 1rem 0.5rem;
   }
 
-
   & table {
-
-    overflow: hidden; // for "slide in and expand" animating purposes
+    overflow: hidden;
 
     width: 100%;
     border-collapse: collapse;
+
     & td {
       padding-left: 12px;
 
-      // for "slide in and expand" animating purposes
-      overflow: hidden;
-      white-space: nowrap;
+      word-wrap: break-word;
     }
 
     & td:first-of-type {
@@ -34,7 +31,7 @@
     }
 
     & tr:nth-of-type(odd) {
-        background: darkgrey;
+      background: darkgrey;
     }
   }
 }
