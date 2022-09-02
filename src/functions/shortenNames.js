@@ -2,8 +2,10 @@
 
 function shortenNames (countryName) {
     switch (countryName) {
-        case "Democratic Republic of the Congo":
+        case "Republic of the Congo":
             return "Congo"
+        case "Democratic Republic of the Congo":
+            return "Congo (DCR)"
         case "People's Republic of China":
             return "China";
         case "United States of America":
