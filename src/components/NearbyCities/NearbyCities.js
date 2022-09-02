@@ -55,14 +55,17 @@ function NearbyCities({
     >
       {/* List of nearby cities found */}
 
-      <div className={"nearby-cities__buttons"}>
+      <div className={"nearby-cities__selection"}>
         <h3 className="nearby-cities__header">Nearby cities</h3>
+        <div className="nearby-cities__buttons">
+
         <ButtonsFromCityArray
           cityArray={nearbyCitiesArr}
           mainCity={mainCity}
           inputError={inputError}
           setNearbyCity={setNearbyCity}
         />
+        </div>
       </div>
 
       {/* Information for selected nearby city (can be empty if none selected) */}
