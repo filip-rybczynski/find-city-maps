@@ -1,20 +1,25 @@
+// React
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
+
+// Components
 import CityMap from "./../Map/CityMap";
 import Layers from "../Layers/Layers";
 import TileLayer from "../Layers/TileLayer";
 import VectorLayer from "../Layers/VectorLayer";
 import MapOptions from "../MapOptions/MapOptions";
 
+// Helper functions
+import createMarker from "../../functions/createMarker";
+
 // values
 import { DEFAULT_ZOOM } from "../../constants";
 
-import {View} from "ol";
+// Third party
 import { fromLonLat } from "ol/proj.js";
 import { boundingExtent } from "ol/extent.js";
 import OSM from "ol/source/OSM.js";
 import Vector from "ol/source/Vector.js";
-
-import createMarker from "../../functions/createMarker";
 
 // Done based on: https://medium.com/swlh/how-to-incorporate-openlayers-maps-into-react-65b411985744
 
@@ -106,6 +111,11 @@ function MapDisplay({ city, nearbyCity }) {
       />
     </div>
   );
+}
+
+MapDisplay.propTypes = {
+  city: PropTypes.object,
+  nearbyCity: PropTypes.object,
 }
 
 export default MapDisplay;

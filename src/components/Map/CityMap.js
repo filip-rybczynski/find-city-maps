@@ -1,15 +1,17 @@
+// React
 import React, { useState, useEffect, useRef } from "react";
-import "./city-map.scss";
+import PropTypes from "prop-types";
+
+// Components
 import MapContext from "./MapContext";
 
+// Styles
+import "./city-map.scss";
+
+// Third party
 import { Map, View } from "ol";
 import { ScaleLine, defaults as defaultControls } from "ol/control";
 import "ol/ol.css";
-
-// import OSM from 'ol/source/OSM.js';
-// import TileLayer from "ol/layer/Tile";
-
-// import OLTileLayer from "ol/layer/Tile"; // a way to access directly. Otherwise, it's ol.layer.Tile
 
 const CityMap = ({
   children,
@@ -99,6 +101,18 @@ const CityMap = ({
       </div>
     </MapContext.Provider>
   );
+};
+
+CityMap.propTypes = {
+  children: PropTypes.oneOfType([
+    PropTypes.arrayOf(PropTypes.node),
+    PropTypes.node,
+  ]),
+  center: PropTypes.array,
+  zoom: PropTypes.number,
+  setStateZoom: PropTypes.func,
+  setStateCenter: PropTypes.func,
+  extent: PropTypes.array,
 };
 
 export default CityMap;
