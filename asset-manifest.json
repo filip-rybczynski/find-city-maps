@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/find-city-maps/static/css/main.1d0c58d8.css",
+    "main.js": "/find-city-maps/static/js/main.eec3f978.js",
+    "static/js/787.62637265.chunk.js": "/find-city-maps/static/js/787.62637265.chunk.js",
+    "static/media/github-icon-lightblue.svg": "/find-city-maps/static/media/github-icon-lightblue.ecfb380ce7d194ae0fcbbbd5da73b049.svg",
+    "index.html": "/find-city-maps/index.html",
+    "main.1d0c58d8.css.map": "/find-city-maps/static/css/main.1d0c58d8.css.map",
+    "main.eec3f978.js.map": "/find-city-maps/static/js/main.eec3f978.js.map",
+    "787.62637265.chunk.js.map": "/find-city-maps/static/js/787.62637265.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.1d0c58d8.css",
+    "static/js/main.eec3f978.js"
+  ]
+}
