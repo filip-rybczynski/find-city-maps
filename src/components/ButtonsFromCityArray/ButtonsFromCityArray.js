@@ -60,7 +60,7 @@ function ButtonsFromCityArray({
       {/* Button text content */}
       {city.name}
       {city.countryCode !== mainCity.countryCode && // additional data point if button refers to city in different country than the main displayed city
-        " " + city.countryCode}
+        " (" + city.countryCode + ")"}
     </button>
   ));
 }
