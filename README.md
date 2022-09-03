@@ -1,4 +1,4 @@
-# City map search 🏙🗺
+# Find city maps 🏙🗺
 
 A simple app which can be used to display maps of selected cities. App also allows to view nearby cities of any chosen city, if there are any in the nearest vicinity.
 

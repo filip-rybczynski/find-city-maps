@@ -24,7 +24,7 @@ function App() {
 
   return (
     <div className={"main"} id="top">
-      <h1 className={"main__header"}>City maps</h1>
+      <h1 className={"main__header"}>Find city maps</h1>
       {apiCallsLeft !== 1000 && (
         <aside className="main__counter">
           <APICallCounter callsRemaining={apiCallsLeft} />
