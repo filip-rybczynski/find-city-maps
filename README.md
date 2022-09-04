@@ -9,7 +9,7 @@ A simple app which can be used to display maps of selected cities. App also allo
 - Interacting with Open Layers
 - Basics of using mixins (with variables) in SCSS
 
-## Potential areas for future improvements/upgrades 🤔💹
+## Potential areas for future improvements/upgrades 🤔📈
 
 - better accessibility
 - adding animations to the Open Layers map changes
@@ -25,7 +25,7 @@ A simple app which can be used to display maps of selected cities. App also allo
 - The API treats districts as cities, so for large cities all nearby cities might be its districts`npm start`
 - Open Street Maps have city names in local languages, so there can be a mismatch between the name displayed in the app (which comes from the GeoDB API) and the name visible on the map
 
-## Additional information 👨‍💻🔢
+## Additional information ℹ👨‍💻
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
