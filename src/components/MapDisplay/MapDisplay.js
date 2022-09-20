@@ -15,6 +15,9 @@ import createMarker from "../../functions/createMarker";
 // values
 import { DEFAULT_ZOOM } from "../../constants";
 
+// styles
+import "./map-display.scss";
+
 // Third party
 import { fromLonLat } from "ol/proj.js";
 import { boundingExtent } from "ol/extent.js";
@@ -86,7 +89,7 @@ function MapDisplay({ city, nearbyCity }) {
   }, [city, nearbyCity]);
 
   return (
-    <div>
+    <div className="map-display">
       <h3>Map of {city.name}</h3>
       <CityMap
         center={center}

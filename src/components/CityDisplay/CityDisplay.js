@@ -31,6 +31,7 @@ function CityDisplay({
   return (
     <article className={"city-display"} id={"city-display"}>
       <h2>{mainCity.name}</h2>
+      <MapDisplay city={mainCity} nearbyCity={nearbyCity} />
       <div className="city-display__information">
         <section className="city-display__general-info main-info">
           <CityInfo city={mainCity} headerText={"General info"} />
@@ -57,7 +58,6 @@ function CityDisplay({
           className="city-display__nearby-cities"
         />
       </div>
-      <MapDisplay city={mainCity} nearbyCity={nearbyCity} />
     </article>
   );
 }
